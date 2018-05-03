@@ -1,20 +1,201 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-    <script src="webrtc.js"></script>
-  </head>
 
-  <body>
-    <video id="localVideo" autoplay muted style="width:40%;"></video>
-    <video id="remoteVideo" autoplay style="width:40%;"></video>
+<head>
 
-    <br />
+  <meta charset="UTF-8">
+  <title>Video Chat with WebRTC</title>
 
-    <input type="button" id="start" onclick="start(true)" value="Start Video"></input>
+  <!-- Use Bootswatch CSS from cdn -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css">
 
-    <script type="text/javascript">
-        pageReady();
-    </script>
-  </body>
+
+  <style>
+    video {
+      border: 2px solid;
+    }
+
+    #widget-container>html {
+      background: blue;
+    }
+
+    .design-surface {
+      background: none transparent;
+    }
+
+    .teste {
+      border: 1px solid;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 400px;
+      width: 300px;
+    }
+
+    .canvas-video {
+      z-index: 99;
+    }
+  </style>
+
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="row" style="height: 400px;">
+      <!-- <div class="col-md-6 col-lg-6"> -->
+      <!-- 
+                    Display video of the current user
+                    Note: mute your own video, otherwise you'll hear yourself ...
+                 -->
+      <!-- <div class="text-center">
+                    <video id="my-camera" width="300" height="300" autoplay="autoplay" muted="true" class="center-block"></video>
+                    <span class="label label-info">You</span>
+                </div> -->
+      <!-- </div> -->
+
+
+
+
+      <div class="col-xs-6 col-xs-offset-3">
+        <!-- Display video of the connected peer -->
+        <div class="text-center">
+          <div class="col-xs-12">
+            <!-- <canvas id="canvas-camera" width="300" height="400" style="border: 1px solid" class="teste canvas-video"></canvas> -->
+            <!-- <video id="peer-camera" width="300" height="400" autoplay="autoplay" style="border: 1px solid black; background-color: red;"
+              class="teste"></video> -->
+
+            <video id="localVideo" autoplay muted style="width:40%;"></video>
+            <video id="remoteVideo" autoplay style="width:40%;"></video>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="col-xs-6">
+                <div class="text-center">
+                    <div class="col-xs-12">
+                        <div class="video-content" style="height: 400px; width: 300px;">
+                            <canvas id="myCanvas" width="300" height="400" class="canvas" style="border: 1px solid black "></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+    </div>
+
+    <div class="row">
+      <div class="form-group col-xs-6 col-xs-offset-3">
+        <div class="col-lg-10 col-lg-offset-2">
+          <button id="start" onclick="start(true)" class="btn btn-info">CALL</button>
+          <button id="connect-to-peer-btn" class="btn btn-primary">Editar</button>
+          <button id="btn-reender" class="btn btn-primary">Reenderizar</button>
+          <button id="btn-limpar" class="btn btn-primary">Limpar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <h1 class="text-center">
+        Videochat Example
+        <br>
+        <small> Informe seu ID para conversar com outras pessoas.</small>
+      </h1>
+      <!--The ID of your current session-->
+      <h4 class="text-center">
+        <span id="peer-id-label"></span>
+      </h4>
+      <!-- <div class="col-md-12 col-lg-12">
+                <div class="form-horizontal" id="connection-form">
+                    <fieldset>
+                        <legend>Connection Form</legend>
+                        <div class="form-group">
+                            <label for="name" class="col-lg-2 control-label">Username</label>
+                            <div class="col-lg-10">
+                                <input type="text" class="form-control" name="name" id="name" placeholder="Your random username">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="peer_id" class="col-lg-2 control-label">Peer ID (id of your pal)</label>
+                            <div class="col-lg-10">
+                                <input type="text" class="form-control" name="peer_id" id="peer_id" placeholder="Peer ID" autocomplete="off" autocorrect="off"
+                                    autocapitalize="off" spellcheck="false"> -- Show message if someone connected to the client --
+                                <div id="connected_peer_container" class="hidden">
+                                    An user is already connected to your session. Just provide a name to connect !
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-10 col-lg-offset-2">
+                                <button id="connect-to-peer-btn" class="btn btn-primary">Connect to Peer</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div> -->
+      <div class="col-md-12 col-lg-12">
+        <div id="chat" class="hidden">
+          <div id="messages-container">
+            <div class="list-group" id="messages"></div>
+          </div>
+          <div id="message-container">
+            <div class="form-group">
+              <label class="control-label">Live chat</label>
+              <div class="input-group">
+                <span class="input-group-btn">
+                  <input type="button" id="start" onclick="start(true)" class="btn btn-info">CALL</input>
+                </span>
+                <input type="text" class="form-control" name="message" id="message" placeholder="Your messag here ...">
+                <span class="input-group-btn">
+                  <button id="send-message" class="btn btn-success">Send Message</button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 text-center">
+        <h1>
+          Gravar Vídeo
+        </h1>
+        <div class="form-group">
+          <div class="col-xs-12">
+            <button id="btn-grvar" class="btn btn-primary" onclick="gravarVideo();">GRAVAR</button>
+            <button id="btn-stop-gravacao" class="btn btn-danger" disabled onclick="pararGravacao();">STOP</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 text-center">
+        <h1>Print</h1>
+        <div class="form-group col-lg-12">
+          <button id="snap" class="btn btn-primary">Tirar Print</button>
+        </div>
+        <canvas id="canvas-print"></canvas>
+      </div>
+    </div>
+
+  </div>
+
+
+  <script src="https://cdn.webrtc-experiment.com/MultiStreamsMixer.min.js"></script>
+  <script src="https://cdn.webrtc-experiment.com/screenshot.js"></script>
+  <script src="https://cdn.webrtc-experiment.com/RecordRTC.js"></script>
+  <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+  <script src="resources/tools/File-Saver/FileSaver.min.js"></script>
+  <script src="resources/js/webrtc.js"></script>
+
+  <script type="text/javascript">
+    pageReady();
+  </script>
+</body>
+
 </html>

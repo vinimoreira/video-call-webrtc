@@ -1,0 +1,8 @@
+{
+    "host": "localhost",
+    "port": 4443,
+    "ssl": {
+        "key": "./../certificates/privkey.pem",
+        "cert": "./../certificates/cert.pem"
+    }
+}

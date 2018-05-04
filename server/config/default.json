@@ -1,0 +1,9 @@
+{
+    "host": "localhost",
+    "port": 9000,
+    "path": "/peerjs",
+    "ssl": {
+        "key": "./../certificates/localhost.key",
+        "cert": "./../certificates/localhost.crt"
+    }
+}

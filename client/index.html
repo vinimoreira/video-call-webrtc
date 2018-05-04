@@ -59,40 +59,35 @@
 
 
 
-      <div class="col-xs-6 col-xs-offset-3">
+      <div class="col-xs-6 col-xs-offset-4">
         <!-- Display video of the connected peer -->
         <div class="text-center">
           <div class="col-xs-12">
-            <!-- <canvas id="canvas-camera" width="300" height="400" style="border: 1px solid" class="teste canvas-video"></canvas> -->
-            <!-- <video id="peer-camera" width="300" height="400" autoplay="autoplay" style="border: 1px solid black; background-color: red;"
-              class="teste"></video> -->
-
-            <video id="localVideo" autoplay muted style="width:40%;"></video>
-            <video id="remoteVideo" autoplay style="width:40%;"></video>
-
+            <canvas id="canvas-camera" width="300" height="400" style="border: 1px solid" class="teste canvas-video"></canvas>
+            <video id="remoteVideo" autoplay width="300" height="400" class="teste" style="border: 1px solid black;"></video>
+            <video id="localVideo" autoplay muted style="width:1px; height: 1px;"></video>
           </div>
         </div>
       </div>
 
-      <!-- <div class="col-xs-6">
-                <div class="text-center">
-                    <div class="col-xs-12">
-                        <div class="video-content" style="height: 400px; width: 300px;">
-                            <canvas id="myCanvas" width="300" height="400" class="canvas" style="border: 1px solid black "></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-
     </div>
 
+    <br>
+
+    <div class="row">
+      <div class="form-group col-xs-4 col-xs-offset-4">
+        <div class="col-lg-10">
+          <label for="name" class="control-label">Usuario</label>
+          <input type="text" class="form-control" name="other-id" id="other-id" placeholder="Id">
+        </div>
+      </div>
+    </div>
     <div class="row">
       <div class="form-group col-xs-6 col-xs-offset-3">
         <div class="col-lg-10 col-lg-offset-2">
           <button id="start" onclick="start(true)" class="btn btn-info">CALL</button>
           <button id="connect-to-peer-btn" class="btn btn-primary">Editar</button>
-          <button id="btn-reender" class="btn btn-primary">Reenderizar</button>
-          <button id="btn-limpar" class="btn btn-primary">Limpar</button>
+          <button id="btn-limpar" class="btn btn-primary" onclick="limparPontos();" >Limpar</button>
         </div>
       </div>
     </div>

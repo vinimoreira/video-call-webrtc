@@ -55,9 +55,11 @@ function getUserMediaSuccess(stream) {
 }
 
 function start(isCaller) {
+  
   peerConnection = new RTCPeerConnection(peerConnectionConfig);
   peerConnection.onicecandidate = gotIceCandidate;
   peerConnection.ontrack = gotRemoteStream;
+  peerConnection.onremovestream = stop;
   peerConnection.addStream(localStream);
 
   if (isCaller) {
@@ -66,10 +68,16 @@ function start(isCaller) {
       .then(createdDescription)
       .catch(errorHandler);
   }
+  
+}
+
+function stop() {
+  peerConnection.close();
+  localStream.stop();
 }
 
 function gotMessageFromServer(message) {
-  if (!peerConnection) start(false);
+  if (!peerConnection || peerConnection.signalingState == "closed" ) start(false);
 
   if (!message.data) return;
 
@@ -330,14 +338,12 @@ function limparDadosCanvas() {
 }
 
 function print() {
-
   var video = document.getElementById("remoteVideo");
   var canvas_print = document.getElementById("canvas-print");
 
   canvas_print.height = video.height;
   canvas_print.width = video.width;
-  
+
   var ctx = canvas_print.getContext("2d");
   ctx.drawImage(video, 0, 0, video.width, video.height);
-
 }

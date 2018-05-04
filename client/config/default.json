@@ -1,8 +1,10 @@
 {
-    "host": "localhost",
-    "port": 9000,
     "ssl": {
         "key": "./../certificates/localhost.key",
         "cert": "./../certificates/localhost.crt"
-    }
+    },
+    "LANAccess": "0.0.0.0",
+    "port-http": 8224,
+    "port-https": 8443
+
 }

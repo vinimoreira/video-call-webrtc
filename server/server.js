@@ -80,38 +80,67 @@ function requisicaoValida(params) {
 }
 
 function retornaSocketPorId(id) {
-  var _socket = socket.find(function(socket) {
-    return socket.uuid == id;
-  });
+  try {
+    var _socket = socket.find(function(socket) {
+      return socket.uuid == id;
+    });
 
-  if (_socket) console.log("SOCKET ENCONTRADO: ", id);
+    if (_socket) console.log("SOCKET ENCONTRADO: ", id);
 
-  return _socket;
+    return _socket;
+  } catch (error) {
+    criarLogErro("Erro ao retornar Socket: " + id, error);
+  }
 }
 
 function enviaDadosSocket(uuid, data) {
-  var _socket = retornaSocketPorId(uuid);
-  _socket.send(JSON.stringify(data));
+  try {
+    var _socket = retornaSocketPorId(uuid);
+    _socket.send(JSON.stringify(data));
+  } catch (error) {
+    criarLogErro("Erro ao enviar dados para o Socket: " + uuid, error);
+  }
 }
 
 function criarDescription(data) {
-  console.log("Criar Stream");
-  enviaDadosSocket(data.request, data);
+  try {
+    console.log("Criar Stream");
+    enviaDadosSocket(data.request, data);
+  } catch (error) {
+    criarLogErro("Erro ao Criar Description: " + data.request, error);
+  }
 }
 
 function sendIceCandidate(data) {
-  console.log("Enviar ICE Candidate");
-  enviaDadosSocket(data.request, data);
+  try {
+    console.log("Enviar ICE Candidate");
+    enviaDadosSocket(data.request, data);
+  } catch (error) {
+    criarLogErro("Erro ao enviar ICE Candidate: " + data.request, error);
+  }
 }
 
 function enviarDadosCanvas(data) {
-  console.log("Enviando dados do canvas");
-  enviaDadosSocket(data.request, data);
+  try {
+    console.log("Enviando dados do canvas");
+    enviaDadosSocket(data.request, data);
+  } catch (error) {
+    criarLogErro("Erro ao enviar dados Canvas: " + data.request, error);
+  }
 }
 
 function limparCanvas() {
-  console.log("Limpar dados do canvas");
-  enviaDadosSocket(data.request, data);
+  try {
+    console.log("Limpar dados do canvas");
+    enviaDadosSocket(data.request, data);
+  } catch (error) {
+    criarLogErro("Erro ao limpar Canvas: " + data.request, error);
+  }
+}
+
+function criarLogErro(mensagem, erro) {
+  console.warn(mensagem);
+  console.log("Erro: ", erro);
 }
 
 console.log(

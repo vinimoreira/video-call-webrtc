@@ -6,6 +6,7 @@ var uuid;
 var serverConnection;
 var recorder;
 var request;
+var points = [];
 
 var peerConnectionConfig = {
   iceServers: [
@@ -35,7 +36,6 @@ function pageReady() {
   serverConnection.onmessage = gotMessageFromServer;
 
   var constraints = {
-    video: true,
     audio: true
   };
 
@@ -69,7 +69,6 @@ function start(isCaller) {
 }
 
 function gotMessageFromServer(message) {
-  
   if (!peerConnection) start(false);
 
   if (!message.data) return;
@@ -86,7 +85,7 @@ function gotMessageFromServer(message) {
       receivedSDP(_data);
       break;
     case "ICE_CANDIDATE":
-      receivedSDP(_data);
+      receivedIceCandidate(_data);
       break;
     case "DRAW_CANVAS":
       desenharPontos(_data);
@@ -125,7 +124,6 @@ function receivedIceCandidate(signal) {
 }
 
 function gotIceCandidate(event) {
-
   if (!request) request = document.getElementById("other-id").value;
 
   if (event.candidate != null) {
@@ -161,7 +159,6 @@ function createdDescription(description) {
 }
 
 function gotRemoteStream(event) {
-  
   console.log("got remote stream");
   var stream = event.streams[0];
   remoteVideo.srcObject = stream;
@@ -171,6 +168,7 @@ function gotRemoteStream(event) {
   mixer.frameInterval = 1;
   mixer.startDrawingFrames();
 
+  //Faz a mescla dos streams para salvar com os dois áudios
   recorder = RecordRTC(mixer.getMixedStream(), {
     type: "video",
     recorderType: MediaStreamRecorder || CanvasRecorder || StereoAudioRecorder
@@ -184,7 +182,7 @@ function errorHandler(error) {
 // Taken from http://stackoverflow.com/a/105074/515584
 // Strictly speaking, it's not a real UUID, but it gets the job done here
 function createUUID() {
-  return Math.floor(Math.random() * 1000) + 1;
+  return Math.floor(Math.random() * 10000) + 1;
 }
 
 function gravarVideo() {
@@ -218,7 +216,6 @@ function downloadVideo(blobUrl) {
 function defineCanvasDesenho() {
   var canvas_camera = document.getElementById("canvas-camera");
   var ctx = canvas_camera.getContext("2d"),
-    points = [],
     isDown = false,
     prevX,
     prevY;
@@ -264,11 +261,10 @@ function defineCanvasDesenho() {
   };
 
   canvas_camera.onmouseup = function() {
-    
     isDown = false;
 
     if (!request) request = document.getElementById("other-id").value;
-    console.log(JSON.stringify(points));
+
     serverConnection.send(
       JSON.stringify({
         type: "DRAW_CANVAS",
@@ -331,4 +327,17 @@ function limparDadosCanvas() {
   var ctx_other = canvas_other.getContext("2d");
   ctx_other.clearRect(0, 0, canvas_other.width, canvas_other.height);
   points = [];
+}
+
+function print() {
+
+  var video = document.getElementById("remoteVideo");
+  var canvas_print = document.getElementById("canvas-print");
+
+  canvas_print.height = video.height;
+  canvas_print.width = video.width;
+  
+  var ctx = canvas_print.getContext("2d");
+  ctx.drawImage(video, 0, 0, video.width, video.height);
+
 }

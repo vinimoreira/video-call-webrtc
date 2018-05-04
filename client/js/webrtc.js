@@ -31,7 +31,7 @@ function pageReady() {
 
   serverConnection = new WebSocket(
     // "wss://" + window.location.hostname + ":8443"
-    "wss://" + "172.16.22.119" + ":9000/" + uuid
+    "wss://" + window.location.hostname + ":4443/" + uuid
   );
   serverConnection.onmessage = gotMessageFromServer;
 
@@ -68,7 +68,7 @@ function start(isCaller) {
       .then(createdDescription)
       .catch(errorHandler);
   }
-  
+
 }
 
 function stop() {

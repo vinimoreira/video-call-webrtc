@@ -31,7 +31,7 @@ function pageReady() {
 
   serverConnection = new WebSocket(
     // "wss://" + window.location.hostname + ":8443"
-    "wss://" + window.location.hostname + ":4443/" + uuid
+    "wss://" + "confitecirisk.brazilsouth.cloudapp.azure.com" + ":4443/" + uuid
   );
   serverConnection.onmessage = gotMessageFromServer;
 
@@ -203,6 +203,7 @@ function pararGravacao() {
     .getElementById("btn-stop-gravacao")
     .setAttribute("disabled", "disabled");
   recorder.stopRecording(function(url) {
+    console.log(url);
     downloadVideo(url);
   });
 }

@@ -7,6 +7,9 @@ const config = require("config");
 
 const WebSocketServer = WebSocket.Server;
 
+///TODO: Criar mecanismo para fechar o socket 
+///TODO: Abrir conexão socket somente ao clicar em CALL
+
 // Yes, TLS is required
 const serverConfig = {
   key: fs.readFileSync(config.get("ssl.key")),

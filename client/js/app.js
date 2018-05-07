@@ -93,13 +93,12 @@ function QuestionarioController($scope) {
   };
 
   ctrl.abrirDocumentos = function(pergunta) {
-    debugger;
     ctrl.anexos = pergunta.documentos;
     $("#anexos-perguntas").modal("show");
   };
 
   ctrl.tirarPrint = function(questao) {
-    debugger;
+    
     var video = document.getElementById("remoteVideo");
     var canvas_print = document.getElementById("canvas-print");
 
@@ -122,7 +121,7 @@ function QuestionarioController($scope) {
   };
 
   ctrl.pararGravacao = function(questao) {
-    debugger;
+    
     questao.gravando = false;
     recorder.stopRecording(function(url) {
       questao.documentos.push({ type: "Video", src: url });
@@ -146,7 +145,6 @@ function QuestionarioController($scope) {
   };
 
   ctrl.downloadImagem = function(blob) {
-    debugger;
     saveAs(blob, "image.png");
   };
 

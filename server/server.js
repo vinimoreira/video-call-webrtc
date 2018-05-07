@@ -63,7 +63,10 @@ wss.on("connection", function(ws, req) {
         enviarDadosCanvas(data);
         break;
       case "CLEAN_CANVAS":
-        enviarDadosCanvas(data);
+        limparCanvas(data);
+        break;
+      case "ENCERRAR_CHAMADA":
+        encerrarChamada(data);
         break;
       default:
         break;
@@ -129,12 +132,21 @@ function enviarDadosCanvas(data) {
   }
 }
 
-function limparCanvas() {
+function limparCanvas(data) {
   try {
     console.log("Limpar dados do canvas");
     enviaDadosSocket(data.request, data);
   } catch (error) {
     criarLogErro("Erro ao limpar Canvas: " + data.request, error);
+  }
+}
+
+function encerrarChamada(data) {
+  try {
+    console.log("Encerrar chamada");
+    enviaDadosSocket(data.request, data);
+  } catch (error) {
+    criarLogErro("Erro ao encerrar chamada: " + data.request, error);
   }
 }
 

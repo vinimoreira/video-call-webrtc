@@ -113,9 +113,6 @@
     }
   </style>
 
-  <script src="resources/tools/angular/angular.min.js"></script>
-  <script src="resources/js/app.js"></script>
-
 </head>
 
 <body ng-app="app">
@@ -207,7 +204,7 @@
                             <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="{{questao.titulo}}">
                           </div>
                           <div class="col-xs-3">
-                            <button type="button" class="btn btn-primary" data-toggle="tooltip" title="Tirar Print" ng-click="vm.tirarPrint(questao);">
+                            <button type="button" class="btn btn-primary" data-toggle="tooltip" title="Tirar Foto" ng-click="vm.tirarPrint(questao);">
                               <span class="glyphicon glyphicon glyphicon-camera" aria-hidden="true"></span>
                             </button>
                             <button type="button" class="btn btn-primary" data-toggle="tooltip" title="Gravar Vídeo" ng-click="vm.gravarVideo(questao)"
@@ -221,7 +218,7 @@
                           </div>
                           <div class="col-xs-2">
                             <button type="button" class="btn btn-warning" data-toggle="tooltip" title="Parar Gravação" ng-click="vm.abrirDocumentos(questao)">
-                              <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> &nbsp; Documentos
+                              <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> &nbsp; Anexos
                               <span class="badge badge-green ">{{questao.documentos.length}}</span>
                             </button>
                           </div>
@@ -293,7 +290,11 @@
 
   </div>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+
+  <script src="resources/tools/angular/angular.min.js"></script>
+  <script src="resources/js/app.js"></script>
 
   <!-- Latest compiled and minified JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"

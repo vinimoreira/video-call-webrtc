@@ -102,6 +102,19 @@ function QuestionarioController($scope) {
     var video = document.getElementById("remoteVideo");
     var canvas_print = document.getElementById("canvas-print");
 
+    //Animation do print
+    angular.element("#remoteVideo").animate(
+      {
+        opacity: 0.3
+      },
+      function() {
+        //call when the animation is complete
+        angular.element("#remoteVideo").animate({
+          opacity: 1
+        });
+      }
+    );
+
     canvas_print.height = video.height;
     canvas_print.width = video.width;
 
@@ -109,7 +122,6 @@ function QuestionarioController($scope) {
     ctx.drawImage(video, 0, 0, video.width, video.height);
 
     var dataURL = ctx.canvas.toBlob(function(blob) {
-      // saveAs(blob, "pretty image.png");
       questao.documentos.push({ type: "Imagem", src: blob });
       $scope.$apply();
     });
@@ -121,12 +133,10 @@ function QuestionarioController($scope) {
   };
 
   ctrl.pararGravacao = function(questao) {
-    
     questao.gravando = false;
     recorder.stopRecording(function(url) {
       questao.documentos.push({ type: "Video", src: url });
       $scope.$apply();
-      //   downloadVideo(url);
     });
   };
 

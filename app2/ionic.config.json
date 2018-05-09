@@ -1,0 +1,8 @@
+{
+  "name": "Confitec - VideoCall",
+  "app_id": "br.com.confitec.videocall",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}

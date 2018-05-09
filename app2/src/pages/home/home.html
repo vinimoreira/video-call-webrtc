@@ -1,0 +1,28 @@
+<ion-content padding>
+  <div class="video-content" id="video-content">
+    <canvas #myCanvas class="canvas" width="300" height="400" style="border: 1px solid;"></canvas>
+    <video id="my-video" width="300" height="400" muted="true" class="my-video"></video>
+    <video id="other-video" autoplay></video>
+  </div>
+
+  <!-- <canvas #myCanvas class="canvas"  style="border: 1px solid;"></canvas>
+  <video  #myVideo id="my-video" muted="true" class="my-video"></video>
+  <video #otherVideo id="other-video" autoplay></video>
+   -->
+</ion-content>
+
+<ion-footer text-center>
+  <ion-list>
+    <ion-item>
+      <ion-label color="primary" stacked>Numero</ion-label>
+      <ion-input type="number" placeholder="Numero" [(ngModel)]="callerId"></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <ion-row>
+    <button col-5 offset-1 ion-button color="secondary" (click)="startCall()">Chamar</button>
+    <button col-5 ion-button color="danger" (click)="stopCall()">Desligar</button>
+  </ion-row>
+  <br>
+
+</ion-footer>

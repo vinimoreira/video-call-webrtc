@@ -3,6 +3,7 @@
     "version": "0.0.1",
     "dependencies": {
         "config": "^1.30.0",
+        "cors": "^2.8.4",
         "peer": "^0.2.8"
     }
 }

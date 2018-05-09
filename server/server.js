@@ -10,7 +10,7 @@ const express = require("express");
 const config = require("config");
 const url = require("url");
 const enums = require("./enums");
-
+var cors = require('cors')
 const WebSocketServer = WebSocket.Server;
 
 // Yes, TLS is required
@@ -19,7 +19,10 @@ const serverConfig = {
   cert: fs.readFileSync(config.get("ssl.cert"))
 };
 
-const httpsServer = https.createServer(serverConfig);
+var app = express()
+app.use(cors())
+
+const httpsServer = https.createServer(serverConfig,app);
 httpsServer.listen(config.get("port"), "0.0.0.0");
 
 // ----------------------------------------------------------------------------------------

@@ -6,11 +6,12 @@ const fs = require("fs");
 const https = require("https");
 const WebSocket = require("ws");
 const path = require("path");
-const express = require("express");
 const config = require("config");
-const url = require("url");
-const enums = require("./enums");
 var cors = require('cors')
+const express = require("express");
+// const url = require("url");
+
+
 const WebSocketServer = WebSocket.Server;
 
 // Yes, TLS is required
@@ -22,29 +23,90 @@ const serverConfig = {
 var app = express()
 app.use(cors())
 
-const httpsServer = https.createServer(serverConfig,app);
+const httpsServer = https.createServer(serverConfig, app);
 httpsServer.listen(config.get("port"), "0.0.0.0");
+
+
+var io = require('socket.io')(httpsServer);
+var sockets = [];
 
 // ----------------------------------------------------------------------------------------
 // Create a server for handling websocket calls
-const wss = new WebSocketServer({ server: httpsServer });
-var socket = [];
+// const wss = new WebSocketServer({ server: httpsServer });
+// wss.on("connection", function(ws, req) {
+//   var uuid = ws.upgradeReq.url.replace("/", "");
+//   ws.uuid = uuid;
 
-wss.on("connection", function(ws, req) {
-  var uuid = ws.upgradeReq.url.replace("/", "");
-  ws.uuid = uuid;
+//   //Novo usuário conectado
+//   console.log("Novo usuário conectado: " + uuid);
 
-  //Novo usuário conectado
-  console.log("Novo usuário conectado: " + uuid);
+//   //Valida a requisição
+//   if (!requisicaoValida(ws)) {
+//     ws.close();
+//     return;
+//   }
 
-  //Valida a requisição
-  if (!requisicaoValida(ws)) {
-    ws.close();
-    return;
-  }
+//   ws.on("message", function(message) {
+//     var data = JSON.parse(message);
 
-  ws.on("message", function(message) {
-    var data = JSON.parse(message);
+//     //Mensagem Recebida
+//     console.log("Mensagem Recebida");
+//     console.log("Tipo de Mensagem ", data.type);
+
+//     //Caso não tenha identificador na mensagem
+//     if (!data.type) return;
+
+//     var type = data.type.toUpperCase();
+
+//     switch (type) {
+//       case "CREATE_DESCRIPTION":
+//         criarDescription(data);
+//         break;
+//       case "ICE_CANDIDATE":
+//         sendIceCandidate(data);
+//         break;
+//       case "DRAW_CANVAS":
+//         enviarDadosCanvas(data);
+//         break;
+//       case "CLEAN_CANVAS":
+//         limparCanvas(data);
+//         break;
+//       case "ENCERRAR_CHAMADA":
+//         encerrarChamada(data);
+//         break;
+//       default:
+//         break;
+//     }
+//   });
+
+//   socket.push(ws);
+// });
+io.on('connection', function (socket) {
+
+  // var uuid = ws.upgradeReq.url.replace("/", "");
+
+
+  socket.on("create", function (data) {
+
+    socket.uuid = data.uuid;
+    //Novo usuário conectado
+    console.log("Novo usuário conectado: " + data.uuid);
+
+    //Valida a requisição
+    if (!requisicaoValida(socket)) {
+      socket.close();
+      return;
+    }
+
+  })
+
+  socket.on("message", function (message) {
+
+    console.log('TESTE');
+    console.log(JSON.parse(message.data));
+
+    // var _message = JSON.parse(message);
+    var data = JSON.parse(message.data);
 
     //Mensagem Recebida
     console.log("Mensagem Recebida");
@@ -76,7 +138,8 @@ wss.on("connection", function(ws, req) {
     }
   });
 
-  socket.push(ws);
+  sockets.push(socket);
+
 });
 
 function requisicaoValida(params) {
@@ -87,7 +150,7 @@ function requisicaoValida(params) {
 
 function retornaSocketPorId(id) {
   try {
-    var _socket = socket.find(function(socket) {
+    var _socket = sockets.find(function (socket) {
       return socket.uuid == id;
     });
 
@@ -102,7 +165,7 @@ function retornaSocketPorId(id) {
 function enviaDadosSocket(uuid, data) {
   try {
     var _socket = retornaSocketPorId(uuid);
-    _socket.send(JSON.stringify(data));
+    _socket.emit("message",JSON.stringify(data));
   } catch (error) {
     criarLogErro("Erro ao enviar dados para o Socket: " + uuid, error);
   }

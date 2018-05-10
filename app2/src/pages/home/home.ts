@@ -73,7 +73,6 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit(): any {
-    // debugger;
 
     // let content = this.elRef.nativeElement.querySelector("#video-content");
     // this.width_components = content.width;
@@ -124,7 +123,6 @@ export class HomePage implements OnInit {
   }
 
   stopCall() {
-    debugger;
 
     //Emite evento de encerramento da chamada
     this.socket.emit('call:end', {
@@ -175,43 +173,6 @@ export class HomePage implements OnInit {
       })
       .catch(this.errorHandler);
   }
-
-  // gotMessageFromServer(message) {
-  //   if (
-  //     !this.peerConnection ||
-  //     this.peerConnection.signalingState == "closed"
-  //   ) {
-  //     this.start(false);
-  //   }
-
-  //   if (!message) return;
-
-  //   let _data = JSON.parse(message);
-
-  //   // Ignore messages from ourself
-  //   if (_data.uuid == this.uuid) return;
-
-  //   //Faz a chamada da função de acordo com o tipo de Mensagem
-  //   switch (_data.type) {
-  //     case "CREATE_DESCRIPTION":
-  //       this.receivedSDP(_data);
-  //       break;
-  //     case "ICE_CANDIDATE":
-  //       this.receivedIceCandidate(_data);
-  //       break;
-  //     case "DRAW_CANVAS":
-  //       this.desenharPontos(_data);
-  //       break;
-  //     case "CLEAN_CANVAS":
-  //       this.limparDadosCanvas(_data);
-  //       break;
-  //     case "ENCERRAR_CHAMADA":
-  //       this.stopCall();
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // }
 
   errorHandler(error) {
     alert(JSON.stringify(error));
@@ -341,6 +302,7 @@ export class HomePage implements OnInit {
     if (data.uuid == this.uuid) return;
 
     this.stopCall();
+    this.limparDadosCanvas();
 
   }
 

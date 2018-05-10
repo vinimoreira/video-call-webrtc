@@ -282,10 +282,10 @@ const peerConnectionConfig = {
         recorder = RecordRTC([stream, localStream], {
           type: "video",
           //audioBitsPerSecond: 192000,
-          // video: {
-          //     width: 300,
-          //     height: 400
-          // },
+          video: {
+              width: 300,
+              height: 400
+          },
           // bitsPerSecond: 8000000000, // 1 gb/s,
           recorderType: MediaStreamRecorder || CanvasRecorder || StereoAudioRecorder
         });

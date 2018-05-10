@@ -145,11 +145,12 @@
                     </div>
                     <div class="row text-center">
                       <h1 class="label-questionario">PIN: {{vm.uuid}}</h1>
+                      <input type="text" name="other-id" id="other-id" ng-model="vm.otherId">
                     </div>
                     <div class="row">
                       <div class="form-group col-xs-12 text-center">
 
-                        <button id="start" onclick="start(true)" class="btn btn-success" ng-if="!vm.chamada_iniciada">
+                        <button id="start" ng-click="vm.start();" class="btn btn-success" ng-if="!vm.chamada_iniciada">
                           <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span> Iniciar Chamada
                         </button>
 
@@ -290,6 +291,8 @@
 
   </div>
 
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
 

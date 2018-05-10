@@ -1,11 +1,8 @@
 const fs = require("fs");
 const https = require("https");
-const WebSocket = require("ws");
 var path = require("path");
 const express = require("express");
 const config = require("config");
-
-const WebSocketServer = WebSocket.Server;
 
 ///TODO: Criar mecanismo para fechar o socket 
 ///TODO: Abrir conexão socket somente ao clicar em CALL
@@ -22,26 +19,6 @@ var LANAccess = config.get('LANAccess');
 
 const httpsServer = https.createServer(serverConfig, app);
 httpsServer.listen(config.get('port-https'), LANAccess);
-
-// ----------------------------------------------------------------------------------------
-// Create a server for handling websocket calls
-const wss = new WebSocketServer({ server: httpsServer });
-
-wss.on("connection", function(ws) {
-  ws.on("message", function(message) {
-    // Broadcast any received message to all clients
-    console.log("received: %s", message);
-    wss.broadcast(message);
-  });
-});
-
-wss.broadcast = function(data) {
-  this.clients.forEach(function(client) {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(data);
-    }
-  });
-};
 
 app.get("/", function(req, res) {
   console.log("bateu /");

@@ -94,7 +94,7 @@ const peerConnectionConfig = {
         enviarDadosSocket('canvas:clean', {
           request: Number(request),
           uuid: ctrl.uuid
-        }) 
+        })
 
       };
 
@@ -261,7 +261,7 @@ const peerConnectionConfig = {
               request: Number(request)
             });
 
-            
+
 
           })
           .catch(errorHandler);
@@ -281,6 +281,12 @@ const peerConnectionConfig = {
         //Faz a mescla dos streams para salvar com os dois áudios
         recorder = RecordRTC([stream, localStream], {
           type: "video",
+          audioBitsPerSecond: 192000,
+          video: {
+              width: 300,
+              height: 400
+          },
+          bitsPerSecond: 8000000000, // 1 gb/s,
           recorderType: MediaStreamRecorder || CanvasRecorder || StereoAudioRecorder
         });
       }
@@ -522,16 +528,16 @@ const peerConnectionConfig = {
       }
 
       function encerrarChamada() {
-        
+
         peerConnection.close();
         localStream.stop();
         request = null;
 
         changeCallStatus(false);
         limparDadosCanvas();
-        
+
         alert("Chamada encerrada");
-        
+
       }
 
 

@@ -41,13 +41,7 @@ export class HomePage implements OnInit {
     let constraints = {
       audio: true,
       video: {
-        facingMode: false ? "user" : "environment",
-        // mandatory: {
-        //   maxHeight: 720,
-        //   maxWidth: 1280
-        // },
-        // width: { min: 1024, ideal: 1280, max: 1920 },
-        // height: { min: 776, ideal: 720, max: 1080 }
+        facingMode: false ? "user" : "environment"
       }
     };
 

@@ -273,13 +273,13 @@ const peerConnectionConfig = {
         var stream = event.streams[0];
         remoteVideo.srcObject = stream;
 
-        // var mixer = new MultiStreamsMixer([stream, localStream]);
+        var mixer = new MultiStreamsMixer([stream, localStream]);
 
-        // mixer.frameInterval = 1;
-        // mixer.startDrawingFrames();
+        mixer.frameInterval = 1;
+        mixer.startDrawingFrames();
 
         //Faz a mescla dos streams para salvar com os dois áudios
-        recorder = RecordRTC([stream, localStream], {
+        recorder = RecordRTC(mixer.getMixedStream(), {
           type: "video",
           audioBitsPerSecond: 192000,
           video: {

@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { NavController } from "ionic-angular";
 import { Diagnostic } from "@ionic-native/diagnostic";
+import { Socket } from 'ng-socket-io';
 
 @Component({
   selector: "page-home",
@@ -28,44 +29,47 @@ export class HomePage implements OnInit {
   constructor(
     public navCtrl: NavController,
     private diagnostic: Diagnostic,
-    private elRef: ElementRef // private render: Render
+    private elRef: ElementRef, // private render: Render
+    private socket: Socket
   ) {
+
     this.uuid = this.createUUID();
-    this.serverConnection = new WebSocket(
-      "wss://" +
-        "confitecirisk.brazilsouth.cloudapp.azure.com" +
-        ":4443/" +
-        this.uuid
-    );
-    this.serverConnection.onmessage = ev => this.gotMessageFromServer(ev);
+    this.criarSocket();
 
     navigator.getUserMedia = navigator.mediaDevices.getUserMedia;
 
     let constraints = {
       audio: true,
-      video: { facingMode: false ? "user" : "environment" }
+      video: {
+        facingMode: false ? "user" : "environment",
+        // mandatory: {
+        //   maxHeight: 720,
+        //   maxWidth: 1280
+        // },
+        // width: { min: 1024, ideal: 1280, max: 1920 },
+        // height: { min: 776, ideal: 720, max: 1080 }
+      }
     };
 
-    let permissions = [
-      this.diagnostic.permission.CAMERA,
-      this.diagnostic.permission.RECORD_AUDIO
-    ];
+    navigator.mediaDevices
+      .getUserMedia(constraints)
+      .then(stream => {
+        this.localVideo.muted = true;
+        this.localVideo.srcObject = stream;
+        this.localVideo.play();
 
-    this.diagnostic.requestRuntimePermissions(permissions).then(data => {
-      navigator.mediaDevices
-        .getUserMedia(constraints)
-        .then(stream => {
-          this.localVideo.muted = true;
-          this.localVideo.srcObject = stream;
-          this.localVideo.play();
+        this._localStream = stream;
+        this.start(false);
+      })
+      .catch(err => {
+        alert("Erro ao iniciar Video");
+        console.log(err);
+      });
 
-          this._localStream = stream;
-          this.start(false);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    });
+  }
+
+  ionViewWillLeave() {
+    this.socket.disconnect();
   }
 
   ngOnInit(): any {
@@ -87,27 +91,32 @@ export class HomePage implements OnInit {
   }
 
   start(isCaller) {
-    let configuration = {
-      iceServers: [
-        {
-          urls: ["turn:13.250.13.83:3478?transport=udp"],
-          username: "YzYNCouZM1mhqhmseWk6",
-          credential: "YzYNCouZM1mhqhmseWk6"
-        }
-      ]
-    };
+    try {
+      let configuration = {
+        iceServers: [
+          {
+            urls: ["turn:13.250.13.83:3478?transport=udp"],
+            username: "YzYNCouZM1mhqhmseWk6",
+            credential: "YzYNCouZM1mhqhmseWk6"
+          }
+        ]
+      };
 
-    this.peerConnection = new RTCPeerConnection(configuration);
-    this.peerConnection.onicecandidate = ev => this.gotIceCandidate(ev);
-    this.peerConnection.ontrack = ev => this.gotRemoteStream(ev);
-    this.peerConnection.addStream(this._localStream);
+      this.peerConnection = new RTCPeerConnection(configuration);
+      this.peerConnection.onicecandidate = ev => this.gotIceCandidate(ev);
+      this.peerConnection.ontrack = ev => this.gotRemoteStream(ev);
+      this.peerConnection.addStream(this._localStream);
 
-    if (isCaller) {
-      this.peerConnection
-        .createOffer()
-        .then(description => this.createdDescription(description))
-        .catch(this.errorHandler);
+      if (isCaller) {
+        this.peerConnection
+          .createOffer()
+          .then(description => this.createdDescription(description))
+          .catch(this.errorHandler);
+      }
+    } catch (error) {
+      alert('Erro ao iniciar Conexão: ' + JSON.stringify(error));
     }
+
   }
 
   startCall() {
@@ -115,26 +124,32 @@ export class HomePage implements OnInit {
   }
 
   stopCall() {
+    debugger;
+
+    //Emite evento de encerramento da chamada
+    this.socket.emit('call:end', {
+      request: Number(this.callerId),
+      uuid: this.uuid
+    });
+
     this.peerConnection.close();
-    this._localStream.stop();
+
+
   }
 
-  // Taken from http://stackoverflow.com/a/105074/515584
-  // Strictly speaking, it's not a real UUID, but it gets the job done here
-  private createUUID(): number {
+  createUUID(): number {
     return Math.floor(Math.random() * 10000) + 1;
   }
 
   gotIceCandidate(event) {
     if (event.candidate != null) {
-      this.serverConnection.send(
-        JSON.stringify({
-          type: "ICE_CANDIDATE",
-          request: Number(this.callerId),
-          ice: event.candidate,
-          uuid: this.uuid
-        })
-      );
+
+      this.socket.emit("call:ICECandidate", {
+        request: Number(this.callerId),
+        ice: event.candidate,
+        uuid: this.uuid
+      });
+
     }
   }
 
@@ -149,58 +164,57 @@ export class HomePage implements OnInit {
     this.peerConnection
       .setLocalDescription(description)
       .then(() => {
-        //Manda a sinalização de conexão para o server
-        this.serverConnection.send(
-          JSON.stringify({
-            type: "CREATE_DESCRIPTION",
-            sdp: this.peerConnection.localDescription,
-            uuid: this.uuid,
-            request: Number(this.callerId)
-          })
-        );
+
+        //Notifica o inicio da chamada
+        this.socket.emit("call:start", {
+          sdp: this.peerConnection.localDescription,
+          uuid: this.uuid,
+          request: Number(this.callerId)
+        });
+
       })
       .catch(this.errorHandler);
   }
 
-  gotMessageFromServer(message) {
-    if (
-      !this.peerConnection ||
-      this.peerConnection.signalingState == "closed"
-    ) {
-      this.start(false);
-    }
+  // gotMessageFromServer(message) {
+  //   if (
+  //     !this.peerConnection ||
+  //     this.peerConnection.signalingState == "closed"
+  //   ) {
+  //     this.start(false);
+  //   }
 
-    if (!message.data) return;
+  //   if (!message) return;
 
-    let _data = JSON.parse(message.data);
+  //   let _data = JSON.parse(message);
 
-    // Ignore messages from ourself
-    if (_data.uuid == this.uuid) return;
+  //   // Ignore messages from ourself
+  //   if (_data.uuid == this.uuid) return;
 
-    //Faz a chamada da função de acordo com o tipo de Mensagem
-    switch (_data.type) {
-      case "CREATE_DESCRIPTION":
-        this.receivedSDP(_data);
-        break;
-      case "ICE_CANDIDATE":
-        this.receivedIceCandidate(_data);
-        break;
-      case "DRAW_CANVAS":
-        this.desenharPontos(_data);
-        break;
-      case "CLEAN_CANVAS":
-        this.limparDadosCanvas(_data);
-        break;
-      case "ENCERRAR_CHAMADA":
-        this.stopCall();
-        break;
-      default:
-        break;
-    }
-  }
+  //   //Faz a chamada da função de acordo com o tipo de Mensagem
+  //   switch (_data.type) {
+  //     case "CREATE_DESCRIPTION":
+  //       this.receivedSDP(_data);
+  //       break;
+  //     case "ICE_CANDIDATE":
+  //       this.receivedIceCandidate(_data);
+  //       break;
+  //     case "DRAW_CANVAS":
+  //       this.desenharPontos(_data);
+  //       break;
+  //     case "CLEAN_CANVAS":
+  //       this.limparDadosCanvas(_data);
+  //       break;
+  //     case "ENCERRAR_CHAMADA":
+  //       this.stopCall();
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // }
 
-  private errorHandler(error) {
-    console.log(error);
+  errorHandler(error) {
+    alert(JSON.stringify(error));
   }
 
   receivedSDP(signal) {
@@ -259,7 +273,7 @@ export class HomePage implements OnInit {
     }
   }
 
-  limparDadosCanvas(data) {
+  limparDadosCanvas() {
     let context = this.canvasElement.getContext("2d");
     context.clearRect(
       0,
@@ -268,4 +282,93 @@ export class HomePage implements OnInit {
       this.canvasElement.height
     );
   }
+
+  criarSocket() {
+
+    //Conecta
+    this.socket.connect();
+    this.socket.emit('init', { uuid: this.uuid })
+
+
+    //Resposta dos eventos
+    this.socket.on("call:start", (data) => this.socketCall(data))
+    this.socket.on("call:ICECandidate", (data) => this.socketICE(data));
+    this.socket.on("call:end", (data) => this.socketCallEnd(data))
+    this.socket.on("canvas:clean", (data) => this.socketCanvasClean(data))
+    this.socket.on("canvas:draw", (data) => this.socketCanvasDraw(data));
+
+  }
+
+  private verificaConexao() {
+
+    //Verifica se já está estabelicida a conexão
+    if (!this.peerConnection || this.peerConnection.signalingState == "closed")
+      this.start(false);
+
+  }
+
+  private socketICE(data) {
+
+    //Verfico a Conexao
+    this.verificaConexao();
+
+    if (data.uuid == this.uuid) return;
+
+    this.receivedIceCandidate(data);
+
+  }
+
+  private socketCall(data: any) {
+
+    //Verfico a Conexao
+    this.verificaConexao();
+
+    // Ignore messages from ourself
+    if (data.uuid == this.uuid) return;
+
+    //Atribui o ID do caller
+    //if (!request) request = data.uuid;
+
+    this.receivedSDP(data);
+
+  }
+
+  private socketCallEnd(data) {
+    //Verfico a Conexao
+    this.verificaConexao();
+
+    // Ignore messages from ourself
+    if (data.uuid == this.uuid) return;
+
+    this.stopCall();
+
+  }
+
+  private socketCanvasClean(data) {
+
+    //Verfico a Conexao
+    this.verificaConexao();
+
+    // Ignore messages from ourself
+    if (data.uuid == this.uuid) return;
+
+    //Chama o método que limpa os dados
+    this.limparDadosCanvas();
+
+  }
+
+  private socketCanvasDraw(data) {
+
+    //Verfico a Conexao
+    this.verificaConexao();
+
+    // Ignore messages from ourself
+    if (data.uuid == this.uuid) return;
+
+    //Chama o método que limpa os dados
+    this.desenharPontos(data);
+
+  }
+
+
 }

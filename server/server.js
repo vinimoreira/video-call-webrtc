@@ -22,6 +22,11 @@ app.use(cors())
 var httpsServer = https.createServer(serverConfig, app);
 httpsServer.listen(config.get("port"), "0.0.0.0");
 
+app.get("/test", function(req, res) {
+  res.setHeader('Content-Type', 'application/json');
+  res.send("OK!");
+});
+
 //Socket
 var io = require('socket.io')(httpsServer);
 var sockets = [];

@@ -1,18 +1,12 @@
 "use restrict";
 
-// const HTTPS_PORT = 8443;
-
 const fs = require("fs");
 const https = require("https");
 const WebSocket = require("ws");
 const path = require("path");
 const config = require("config");
-var cors = require('cors')
+const cors = require('cors')
 const express = require("express");
-// const url = require("url");
-
-
-const WebSocketServer = WebSocket.Server;
 
 // Yes, TLS is required
 const serverConfig = {
@@ -20,73 +14,22 @@ const serverConfig = {
   cert: fs.readFileSync(config.get("ssl.cert"))
 };
 
+//Framework
 var app = express()
 app.use(cors())
 
-const httpsServer = https.createServer(serverConfig, app);
+//Servidor
+var httpsServer = https.createServer(serverConfig, app);
 httpsServer.listen(config.get("port"), "0.0.0.0");
 
-
+//Socket
 var io = require('socket.io')(httpsServer);
 var sockets = [];
 
-// ----------------------------------------------------------------------------------------
-// Create a server for handling websocket calls
-// const wss = new WebSocketServer({ server: httpsServer });
-// wss.on("connection", function(ws, req) {
-//   var uuid = ws.upgradeReq.url.replace("/", "");
-//   ws.uuid = uuid;
-
-//   //Novo usuário conectado
-//   console.log("Novo usuário conectado: " + uuid);
-
-//   //Valida a requisição
-//   if (!requisicaoValida(ws)) {
-//     ws.close();
-//     return;
-//   }
-
-//   ws.on("message", function(message) {
-//     var data = JSON.parse(message);
-
-//     //Mensagem Recebida
-//     console.log("Mensagem Recebida");
-//     console.log("Tipo de Mensagem ", data.type);
-
-//     //Caso não tenha identificador na mensagem
-//     if (!data.type) return;
-
-//     var type = data.type.toUpperCase();
-
-//     switch (type) {
-//       case "CREATE_DESCRIPTION":
-//         criarDescription(data);
-//         break;
-//       case "ICE_CANDIDATE":
-//         sendIceCandidate(data);
-//         break;
-//       case "DRAW_CANVAS":
-//         enviarDadosCanvas(data);
-//         break;
-//       case "CLEAN_CANVAS":
-//         limparCanvas(data);
-//         break;
-//       case "ENCERRAR_CHAMADA":
-//         encerrarChamada(data);
-//         break;
-//       default:
-//         break;
-//     }
-//   });
-
-//   socket.push(ws);
-// });
 io.on('connection', function (socket) {
 
-  // var uuid = ws.upgradeReq.url.replace("/", "");
 
-
-  socket.on("create", function (data) {
+  socket.on("init", function (data) {
 
     socket.uuid = data.uuid;
     //Novo usuário conectado
@@ -98,49 +41,80 @@ io.on('connection', function (socket) {
       return;
     }
 
-  })
+  });
 
-  socket.on("message", function (message) {
+  socket.on("call:start", function (message) {
 
-    console.log('TESTE');
-    console.log(JSON.parse(message.data));
+    console.log("Chamada Iniciada");
 
-    // var _message = JSON.parse(message);
-    var data = JSON.parse(message.data);
-
-    //Mensagem Recebida
-    console.log("Mensagem Recebida");
-    console.log("Tipo de Mensagem ", data.type);
-
-    //Caso não tenha identificador na mensagem
-    if (!data.type) return;
-
-    var type = data.type.toUpperCase();
-
-    switch (type) {
-      case "CREATE_DESCRIPTION":
-        criarDescription(data);
-        break;
-      case "ICE_CANDIDATE":
-        sendIceCandidate(data);
-        break;
-      case "DRAW_CANVAS":
-        enviarDadosCanvas(data);
-        break;
-      case "CLEAN_CANVAS":
-        limparCanvas(data);
-        break;
-      case "ENCERRAR_CHAMADA":
-        encerrarChamada(data);
-        break;
-      default:
-        break;
+    //Valida a requisição
+    if (!requisicaoValida(socket)) {
+      socket.close();
+      return;
     }
+
+    callStart(message);
+
+  });
+
+  socket.on("call:ICECandidate", function (message) {
+
+    console.log("Chamada ICE Candidate");
+
+    //Valida a requisição
+    if (!requisicaoValida(socket)) {
+      socket.close();
+      return;
+    }
+
+    callICECandidate(message);
+
+  });
+
+  socket.on("call:end", function (message) {
+
+    console.log("Chamada Finalizada");
+
+    //Valida a requisição
+    if (!requisicaoValida(socket)) {
+      socket.close();
+      return;
+    }
+
+    callEnd(message);
+
+  });
+
+  socket.on("canvas:draw", function (message) {
+
+    console.log("Dados do canvas");
+
+    //Valida a requisição
+    if (!requisicaoValida(socket)) {
+      socket.close();
+      return;
+    }
+
+    canvasDraw(message);
+
+  });
+
+  socket.on("canvas:clean", function (message) {
+
+    console.log("Limpa dados do canvas");
+
+    //Valida a requisição
+    if (!requisicaoValida(socket)) {
+      socket.close();
+      return;
+    }
+
+    canvasClean(message);
+
   });
 
   sockets.push(socket);
-
-});
+})
 
 function requisicaoValida(params) {
   //Incluir validações, pode ser um toke
@@ -162,57 +136,52 @@ function retornaSocketPorId(id) {
   }
 }
 
-function enviaDadosSocket(uuid, data) {
+function enviaDadosSocket(event, uuid, data) {
   try {
     var _socket = retornaSocketPorId(uuid);
-    _socket.emit("message",JSON.stringify(data));
+    _socket.emit(event, data);
   } catch (error) {
     criarLogErro("Erro ao enviar dados para o Socket: " + uuid, error);
   }
 }
 
-function criarDescription(data) {
+function callStart(data) {
   try {
-    console.log("Criar Stream");
-    enviaDadosSocket(data.request, data);
+    enviaDadosSocket("call:start", data.request, data);
   } catch (error) {
     criarLogErro("Erro ao Criar Description: " + data.request, error);
   }
 }
 
-function sendIceCandidate(data) {
+function callICECandidate(data) {
   try {
-    console.log("Enviar ICE Candidate");
-    enviaDadosSocket(data.request, data);
+    enviaDadosSocket("call:ICECandidate", data.request, data);
   } catch (error) {
     criarLogErro("Erro ao enviar ICE Candidate: " + data.request, error);
   }
 }
 
-function enviarDadosCanvas(data) {
+function callEnd(data) {
   try {
-    console.log("Enviando dados do canvas");
-    enviaDadosSocket(data.request, data);
+    enviaDadosSocket("call:end", data.request, data);
+  } catch (error) {
+    criarLogErro("Erro ao encerrar chamada: " + data.request, error);
+  }
+}
+
+function canvasDraw(data) {
+  try {
+    enviaDadosSocket("canvas:draw", data.request, data);
   } catch (error) {
     criarLogErro("Erro ao enviar dados Canvas: " + data.request, error);
   }
 }
 
-function limparCanvas(data) {
+function canvasClean(data) {
   try {
-    console.log("Limpar dados do canvas");
-    enviaDadosSocket(data.request, data);
+    enviaDadosSocket("canvas:clean", data.request, data);
   } catch (error) {
     criarLogErro("Erro ao limpar Canvas: " + data.request, error);
-  }
-}
-
-function encerrarChamada(data) {
-  try {
-    console.log("Encerrar chamada");
-    enviaDadosSocket(data.request, data);
-  } catch (error) {
-    criarLogErro("Erro ao encerrar chamada: " + data.request, error);
   }
 }
 

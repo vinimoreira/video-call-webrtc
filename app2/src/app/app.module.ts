@@ -12,7 +12,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
-const config: SocketIoConfig = { url: 'https://confitecirisk.brazilsouth.cloudapp.azure.com:4443', options: {} };
+const config: SocketIoConfig = { url: 'https://iriskcloud.brazilsouth.cloudapp.azure.com:4443', options: {} };
 
 @NgModule({
   declarations: [

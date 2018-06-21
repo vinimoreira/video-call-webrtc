@@ -111,6 +111,11 @@
     .modal-title {
       color: #8898a9;
     }
+
+    #map {
+      height: 400px;
+      width: 535px;
+    }
   </style>
 
 </head>
@@ -163,6 +168,10 @@
 
                         <button id="btn-limpar" class="btn btn-primary" data-toggle="tooltip" title="Limpar Desenho" ng-click="ctrl.limparPontos();">
                           <span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
+                        </button>
+
+                        <button id="btn-limpar" class="btn btn-primary" data-toggle="tooltip" title="Visualizar Localização" ng-click="ctrl.abrirLocalizacao();">
+                          <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
                         </button>
 
                       </div>
@@ -288,9 +297,29 @@
       </div>
     </div>
 
+    <div class="modal fade" id="modal-localizacao" tabindex="-1" role="dialog" aria-labelledby="modal-localizacao" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Localização</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div id="map"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
   </div>
 
-  
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
@@ -307,6 +336,29 @@
   <script src="https://cdn.webrtc-experiment.com/RecordRTC.js"></script>
   <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
   <script src="resources/tools/File-Saver/FileSaver.min.js"></script>
+
+  <script>
+    function initMap() {
+      var myLatLng = {
+        lat: -23.6197663,
+        lng: -46.6997618
+      };
+
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 18,
+        center: myLatLng
+      });
+
+      var marker = new google.maps.Marker({
+        position: myLatLng,
+        map: map,
+        title: 'Localização'
+      });
+    }
+  </script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCDsTfyz9Jdi9SD9x5mmgk5CD3B8yLpDMs&callback=initMap">
+  </script>
+
   <!-- <script src="resources/js/webrtc.js"></script> -->
   <!-- 
   <script type="text/javascript">

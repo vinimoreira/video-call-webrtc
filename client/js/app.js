@@ -103,6 +103,10 @@ const peerConnectionConfig = {
         $("#anexos-perguntas").modal("show");
       };
 
+      ctrl.abrirLocalizacao = function (pergunta) {
+        $("#modal-localizacao").modal("show");
+      };
+
       ctrl.tirarPrint = function (questao) {
 
         var video = document.getElementById("remoteVideo");
@@ -283,8 +287,8 @@ const peerConnectionConfig = {
           type: "video",
           //audioBitsPerSecond: 192000,
           video: {
-              width: 300,
-              height: 400
+            width: 300,
+            height: 400
           },
           // bitsPerSecond: 8000000000, // 1 gb/s,
           recorderType: MediaStreamRecorder || CanvasRecorder || StereoAudioRecorder

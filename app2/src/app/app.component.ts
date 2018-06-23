@@ -16,6 +16,11 @@ export class MyApp {
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public diagnostic: Diagnostic) {
     platform.ready().then(() => {
 
+      if (!platform.is("cordova")) {
+        this.setRootPage();
+        return;
+      }
+
       let permissions = [
         this.diagnostic.permission.CAMERA,
         this.diagnostic.permission.RECORD_AUDIO
@@ -23,7 +28,7 @@ export class MyApp {
 
       this.diagnostic.requestRuntimePermissions(permissions)
         .then(data => {
-      this.rootPage = HomePage;
+          this.setRootPage();
         })
         .catch((err) => {
           alert("Erro ao solicitar permissão")
@@ -34,5 +39,9 @@ export class MyApp {
       statusBar.styleDefault();
       splashScreen.hide();
     });
+  }
+
+  private setRootPage() {
+    this.rootPage = HomePage;
   }
 }

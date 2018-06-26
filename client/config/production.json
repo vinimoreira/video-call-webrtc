@@ -1,9 +1,10 @@
 {
     "ssl": {
-        "key": "./../certificates/privkey.pem",
-        "cert": "./../certificates/cert.pem"
+        "key": "/etc/letsencrypt/live/remote.irisk.com.br/privkey.pem",
+        "cert": "/etc/letsencrypt/live/remote.irisk.com.br/fullchain.pem"
     },
     "LANAccess": "0.0.0.0",
     "port-http": 8080,
     "port-https": 4444
 }
+

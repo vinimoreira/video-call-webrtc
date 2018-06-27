@@ -412,7 +412,7 @@ const peerConnectionConfig = {
 
       function criarSocket() {
 
-        socket = io.connect('https://irisk.bbmapfre.com.br:4443');
+        socket = io.connect('https://remote.irisk.com.br:4443');
 
         //Método de Conexão
         socket.emit("init", {

@@ -4,18 +4,41 @@ page-home {
     height: 1px;
   }
   .my-video {
-    // width: 90%;
-    height: 400px;
-  }
-  .canvas {
-    width: 300px;
-    // width: 90%;
-    height: 400px;
+    width: 100%;
+    height: 100%;
     position: absolute;
   }
+  .canvas {
+    height: 100%;
+    width: 100%; // height: 400px;
+    position: absolute;
+    background-color: grey;
+  }
   .video-content {
-    width: 100%;
-    height: 400px;
-    text-align: center
+    // width: 100%;
+    // height: 400px;
+    // text-align: center
+  }
+  .row-bottom {
+    position: fixed;
+    bottom: 35px;
+  }
+  .btn-circle {
+    text-align: center;
+    appearance: none;
+    border-radius: 50%;
+    position: relative;
+    z-index: 0;
+    overflow: hidden;
+    width: 56px;
+    height: 56px;
+    font-size: 14px;
+    line-height: 56px;
+    text-overflow: ellipsis;
+    text-transform: none;
+    white-space: nowrap;
+    -webkit-transition: background-color, opacity 100ms linear;
+    transition: background-color, opacity 100ms linear;
+    background-clip: padding-box;
   }
 }

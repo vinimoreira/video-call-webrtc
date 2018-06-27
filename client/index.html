@@ -31,9 +31,9 @@
       border: 1px solid;
       position: absolute;
       top: 0;
-      left: 0;
-      height: 400px;
-      width: 300px;
+      right: 0;
+       /* width: 400px;
+      height: 550px;  */
     }
 
     .canvas-video {
@@ -97,7 +97,6 @@
     }
 
     .box-questoes {
-      max-height: 400px;
       overflow-y: auto;
     }
 
@@ -110,6 +109,11 @@
 
     .modal-title {
       color: #8898a9;
+    }
+
+    #map {
+      height: 400px;
+      width: 535px;
     }
   </style>
 
@@ -131,48 +135,48 @@
           <div class="modal-body">
             <div class="row">
               <div class="col-xs-12">
-                <div class="col-xs-6">
-                  <div class="col-xs-6 col-xs-offset-4">
-                    <div class="row" style="height: 400px;">
-                      <div class="text-center">
-                        <div class="col-xs-12">
-                          <canvas id="canvas-camera" width="300" height="400" style="border: 1px solid" class="teste canvas-video"></canvas>
-                          <video id="remoteVideo" autoplay width="300" height="400" class="teste video-remote" style="border: 1px solid black;"></video>
-                          <video id="localVideo" autoplay muted style="width:1px; height: 1px;"></video>
-                          <canvas id="canvas-print" style="display: none;"></canvas>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row text-center">
-                      <h1 class="label-questionario">PIN: {{ctrl.uuid}}</h1>
-                    </div>
+                <div class="col-xs-5">
+                  <div class="row text-center">
+                    <h2 class="label-questionario">PIN: {{ctrl.uuid}}</h2>
+                  </div>
+                  <div class="col-xs-9">
+
                     <div class="row">
-                      <div class="form-group col-xs-12 text-center">
+                      <canvas id="canvas-camera" width="{{ctrl.width}}" height="{{ctrl.height}}" style="border: 1px solid" class="teste canvas-video"></canvas>
+                      <video id="remoteVideo" width="{{ctrl.width}}" height="{{ctrl.height}}" autoplay class="teste video-remote" style="border: 1px solid black;"></video>
+                      <video id="localVideo" autoplay muted style="width:1px; height: 1px;"></video>
+                      <canvas id="canvas-print" style="display: none;"></canvas>
+                    </div>
 
-                        <button id="start" ng-click="ctrl.start(true);" class="btn btn-success" ng-show="!chamada_iniciada">
-                          <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span> Iniciar Chamada
-                        </button>
+                  </div>
+                  <div class="col-xs-3">
 
-                        <button id="close" class="btn btn-danger" ng-show="chamada_iniciada" ng-click="ctrl.encerrarChamada();">
-                          <span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span> Encerrar Chamada
-                        </button>
+                    <div class="btn-group-vertical">
+                      <button id="start" ng-click="ctrl.start(true);" class="btn btn-success" title="Iniciar Chamada" ng-show="!chamada_iniciada">
+                        <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
+                      </button>
+                      <button id="close" class="btn btn-danger" ng-show="chamada_iniciada" title="Encerrar Chamada" ng-click="ctrl.encerrarChamada();">
+                        <span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span>
+                      </button>
 
-                        <button type="button" class="btn btn-primary" data-toggle="tooltip" title="Reenviar Código">
-                          <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
-                        </button>
+                      <button type="button" class="btn btn-primary" data-toggle="tooltip" title="Reenviar Código">
+                        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                      </button>
 
-                        <button id="btn-limpar" class="btn btn-primary" data-toggle="tooltip" title="Limpar Desenho" ng-click="ctrl.limparPontos();">
-                          <span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
-                        </button>
+                      <button id="btn-limpar" class="btn btn-primary" data-toggle="tooltip" title="Limpar Desenho" ng-click="ctrl.limparPontos();">
+                        <span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
+                      </button>
 
-                      </div>
+                      <button id="btn-limpar" class="btn btn-primary" data-toggle="tooltip" title="Visualizar Localização" ng-click="ctrl.abrirLocalizacao();">
+                        <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
+                      </button>
                     </div>
                   </div>
                 </div>
 
                 <!-- QUESTIONARIO -->
 
-                <div class="card col-xs-6 ">
+                <div class="card col-xs-7">
                   <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                       <h3>
@@ -288,9 +292,31 @@
       </div>
     </div>
 
+    <div class="modal fade" id="modal-localizacao" tabindex="-1" role="dialog" aria-labelledby="modal-localizacao" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Localização</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="text-center">
+              <div id="map"></div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
   </div>
 
-  
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
@@ -307,6 +333,29 @@
   <script src="https://cdn.webrtc-experiment.com/RecordRTC.js"></script>
   <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
   <script src="resources/tools/File-Saver/FileSaver.min.js"></script>
+
+  <script>
+    function initMap() {
+      var myLatLng = {
+        lat: -23.6197663,
+        lng: -46.6997618
+      };
+
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 18,
+        center: myLatLng
+      });
+
+      var marker = new google.maps.Marker({
+        position: myLatLng,
+        map: map,
+        title: 'Localização'
+      });
+    }
+  </script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCDsTfyz9Jdi9SD9x5mmgk5CD3B8yLpDMs&callback=initMap">
+  </script>
+
   <!-- <script src="resources/js/webrtc.js"></script> -->
   <!-- 
   <script type="text/javascript">

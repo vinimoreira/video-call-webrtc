@@ -15,8 +15,6 @@ const peerConnectionConfig = {
   ]
 };
 
-
-
 (function (angular) {
   "use strict";
   var myApp = angular.module("app", []);
@@ -24,11 +22,13 @@ const peerConnectionConfig = {
   myApp.controller("QuestionarioController", [
     "$scope",
     function ($scope) {
-
       var ctrl = this;
       var points = [];
 
       ctrl.uuid;
+      ctrl.width = 300;
+      ctrl.height = 400;
+
       $scope.chamada_iniciada = false;
       ctrl.anexos = [];
 
@@ -53,16 +53,19 @@ const peerConnectionConfig = {
           titulo: "Questão 5",
           tipo: "Gravacao",
           documentos: []
-        },
-        {
-          titulo: "Questão 6",
-          tipo: "Text"
         }
+        // ,{
+        //   titulo: "Questão 6",
+        //   tipo: "Text"
+        // },
+        // {
+        //   titulo: "Questão 7",
+        //   tipo: "Text"
+        // }
       ];
 
       //all your init controller goodness in here
       ctrl.onInit = function () {
-
         localVideo = document.getElementById("localVideo");
         remoteVideo = document.getElementById("remoteVideo");
         ctrl.uuid = createUUID();
@@ -70,32 +73,27 @@ const peerConnectionConfig = {
         defineCanvasDesenho();
         criarSocket();
         criaChamadaLocal();
-
       };
 
       ctrl.encerrarChamada = function () {
-
         //Emite evento de desenho
-        enviarDadosSocket('call:end', {
+        enviarDadosSocket("call:end", {
           request: Number(request),
           uuid: ctrl.uuid
-        })
+        });
 
         encerrarChamada();
-
       };
 
       ctrl.limparPontos = function () {
-
         //Limpa os campos do canvas
         limparDadosCanvas();
 
         //Chama Método de Limpar pontos
-        enviarDadosSocket('canvas:clean', {
+        enviarDadosSocket("canvas:clean", {
           request: Number(request),
           uuid: ctrl.uuid
-        })
-
+        });
       };
 
       ctrl.abrirDocumentos = function (pergunta) {
@@ -103,8 +101,11 @@ const peerConnectionConfig = {
         $("#anexos-perguntas").modal("show");
       };
 
-      ctrl.tirarPrint = function (questao) {
+      ctrl.abrirLocalizacao = function (pergunta) {
+        $("#modal-localizacao").modal("show");
+      };
 
+      ctrl.tirarPrint = function (questao) {
         var video = document.getElementById("remoteVideo");
         var canvas_print = document.getElementById("canvas-print");
 
@@ -136,6 +137,7 @@ const peerConnectionConfig = {
       };
 
       ctrl.gravarVideo = function (questao) {
+        debugger;
         questao.gravando = true;
         recorder.startRecording();
       };
@@ -172,10 +174,9 @@ const peerConnectionConfig = {
       ctrl.start = function () {
         changeCallStatus(true);
         start(true);
-      }
+      };
 
       function start(isCaller) {
-
         changeCallStatus(true);
 
         peerConnection = new RTCPeerConnection(peerConnectionConfig);
@@ -223,28 +224,21 @@ const peerConnectionConfig = {
       }
 
       function gotIceCandidate(event) {
-
         if (event.candidate != null) {
-
           //Notifica o inicio da chamada
           enviarDadosSocket("call:ICECandidate", {
             request: Number(request),
             ice: event.candidate,
             uuid: ctrl.uuid
           });
-
         }
-
       }
 
       function enviarDadosSocket(eventName, dados) {
-
-        if (!request)
-          alert("Chamada não encontrada")
+        if (!request) alert("Chamada não encontrada");
 
         //Notifica o inicio da chamada
         socket.emit(eventName, dados);
-
       }
 
       function createdDescription(description) {
@@ -253,41 +247,42 @@ const peerConnectionConfig = {
         peerConnection
           .setLocalDescription(description)
           .then(function () {
-
             //Notifica o inicio da chamada
             enviarDadosSocket("call:start", {
               sdp: peerConnection.localDescription,
               uuid: ctrl.uuid,
               request: Number(request)
             });
-
-
-
           })
           .catch(errorHandler);
       }
 
       function gotRemoteStream(event) {
+        
         console.log("got remote stream");
 
         var stream = event.streams[0];
         remoteVideo.srcObject = stream;
 
-        // var mixer = new MultiStreamsMixer([stream, localStream]);
+        // var teste = localStream;
+        // teste.addTrack(stream)
+         var mixer = new MultiStreamsMixer([stream, localStream]);
 
-        // mixer.frameInterval = 1;
-        // mixer.startDrawingFrames();
+         mixer.frameInterval = 1;
+         mixer.startDrawingFrames();
 
         //Faz a mescla dos streams para salvar com os dois áudios
-        recorder = RecordRTC([stream, localStream], {
+        recorder = RecordRTC(mixer.getMixedStream(), {
           type: "video",
+          mimeType: "video/webm",
           //audioBitsPerSecond: 192000,
           video: {
-              width: 300,
-              height: 400
+            width: 300,
+            height: 400
           },
           // bitsPerSecond: 8000000000, // 1 gb/s,
           recorderType: MediaStreamRecorder || CanvasRecorder || StereoAudioRecorder
+          //mediaRecorder
         });
       }
 
@@ -347,16 +342,14 @@ const peerConnectionConfig = {
         };
 
         canvas_camera.onmouseup = function () {
-
           isDown = false;
 
           //Emite evento de desenho
-          enviarDadosSocket('canvas:draw', {
+          enviarDadosSocket("canvas:draw", {
             request: Number(request),
             points: points,
             uuid: ctrl.uuid
           });
-
         };
 
         function getXY(e) {
@@ -369,7 +362,6 @@ const peerConnectionConfig = {
       }
 
       function desenharPontos(data) {
-
         points = data.points;
         var canvas_other = document.getElementById("canvas-camera");
         var ctx_other = canvas_other.getContext("2d");
@@ -421,36 +413,33 @@ const peerConnectionConfig = {
 
         //Resposta dos eventos
         socket.on("call:start", function (data) {
-          socketCall(data)
+          socketCall(data);
         });
 
         socket.on("call:ICECandidate", function (data) {
-          socketICE(data)
+          socketICE(data);
         });
 
         socket.on("call:end", function (data) {
-          socketCallEnd(data)
+          socketCallEnd(data);
         });
 
         socket.on("canvas:clean", function (data) {
-          socketCanvasClean(data)
+          socketCanvasClean(data);
         });
 
         socket.on("canvas:draw", function (data) {
-          socketCanvasDraw(data)
+          socketCanvasDraw(data);
         });
-
       }
 
       function socketICE(data) {
-
         //Verfico a Conexao
         verificaConexao();
 
         if (data.uuid == ctrl.uuid) return;
 
         receivedIceCandidate(data);
-
       }
 
       function socketCall(data) {
@@ -464,7 +453,6 @@ const peerConnectionConfig = {
         if (!request) request = data.uuid;
 
         receivedSDP(data);
-
       }
 
       function socketCallEnd(data) {
@@ -475,11 +463,9 @@ const peerConnectionConfig = {
         if (data.uuid == ctrl.uuid) return;
 
         encerrarChamada();
-
       }
 
       function socketCanvasClean(data) {
-
         //Verfico a Conexao
         verificaConexao();
 
@@ -488,11 +474,9 @@ const peerConnectionConfig = {
 
         //Chama o método que limpa os dados
         limparDadosCanvas();
-
       }
 
       function socketCanvasDraw(data) {
-
         //Verfico a Conexao
         verificaConexao();
 
@@ -501,15 +485,12 @@ const peerConnectionConfig = {
 
         //Chama o método que limpa os dados
         desenharPontos(data);
-
       }
 
       function verificaConexao() {
-
         //Verifica se já está estabelicida a conexão
         if (!peerConnection || peerConnection.signalingState == "closed")
           start(false);
-
       }
 
       function criaChamadaLocal() {
@@ -528,7 +509,6 @@ const peerConnectionConfig = {
       }
 
       function encerrarChamada() {
-
         peerConnection.close();
         localStream.stop();
         request = null;
@@ -537,9 +517,7 @@ const peerConnectionConfig = {
         limparDadosCanvas();
 
         alert("Chamada encerrada");
-
       }
-
 
       ctrl.onInit();
       //return ctrl;

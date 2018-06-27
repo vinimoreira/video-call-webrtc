@@ -68,14 +68,6 @@ export class HomePage implements OnInit {
 
   ngOnInit(): any {
 
-    // let content = this.elRef.nativeElement.querySelector("#video-content");
-    // this.width_components = content.width;
-    // this.width_components = this.videoContentElement.nativeElement.offsetWidth;
-    // this.localVideoElement.nativeElement.setAttribute(
-    //   "width",
-    //   this.width_components
-    // );
-
     this.canvas.nativeElement.setAttribute("width", this.width_components);
     this.localVideo = this.elRef.nativeElement.querySelector("#my-video");
     this.otherVideo = this.elRef.nativeElement.querySelector("#other-video");

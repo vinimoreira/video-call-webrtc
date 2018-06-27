@@ -3,7 +3,7 @@
     <name>Confitec - VideoCall</name>
     <description>Aplicativo de VideoConferencia da Confitec</description>
     <author email="vinicius.silva@confitec.com.br" href="http://www.confitec.com.br">Confitec TEAM!</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://172.16.22.177:8100" />
     <access allows-arbitrary-loads-in-media="true" allows-arbitrary-loads-in-web-content="true" allows-local-networking="true" minimum-tls-version="TLSv1.0" origin="*" requires-certificate-transparency="false" requires-forward-secrecy="false" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />

@@ -1,6 +1,6 @@
 {
-    "name": "ConfitecVideoCall",
-    "version": "0.0.6",
+    "name": "Confitec - VideoCall",
+    "version": "0.0.8",
     "author": "Confitec TEAM",
     "homepage": "http://www.confitec.com.br/",
     "private": true,
@@ -27,7 +27,7 @@
         "@ionic-native/status-bar": "4.7.0",
         "@ionic/storage": "2.1.3",
         "@types/webrtc": "0.0.23",
-        "cordova-android": "7.0.0",
+        "cordova-android": "^7.0.0",
         "cordova-opentok-android-permissions": "^1.0.1",
         "cordova-plugin-device": "^2.0.2",
         "cordova-plugin-ionic-keyboard": "^2.0.5",

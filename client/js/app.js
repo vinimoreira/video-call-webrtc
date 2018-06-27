@@ -399,9 +399,8 @@ const peerConnectionConfig = {
       }
 
       function criarSocket() {
-        socket = io.connect(
-          "https://confitecirisk.brazilsouth.cloudapp.azure.com:4443"
-        );
+
+        socket = io.connect('https://remote.irisk.com.br:4443');
 
         //Método de Conexão
         socket.emit("init", {

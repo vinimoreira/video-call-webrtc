@@ -31,7 +31,7 @@ function pageReady() {
 
   serverConnection = new WebSocket(
     // "wss://" + window.location.hostname + ":8443"
-    "wss://" + "confitecirisk.brazilsouth.cloudapp.azure.com" + ":4443/" + uuid
+    "wss://" + "remote.irisk.com.br" + ":4443/" + uuid
   );
   serverConnection.onmessage = gotMessageFromServer;
 

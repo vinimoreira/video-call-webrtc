@@ -258,7 +258,7 @@ const peerConnectionConfig = {
       }
 
       function gotRemoteStream(event) {
-        debugger;
+        
         console.log("got remote stream");
 
         var stream = event.streams[0];

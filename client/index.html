@@ -294,13 +294,9 @@
                     <li class="list-group-item">
                       <h3>
                         <i class="glyphicon glyphicon-bell color-questeionario"></i>&nbsp;
-<<<<<<< HEAD
                         <label class="title-questionario">
                           <b>Enquadramento</b>
                         </label>
-=======
-                        <label class="title-questionario">Enquadramento</label>
->>>>>>> c8054188efa7339c99213bbaca358e6b3dbefed7
                         <a href="#enquadramento" data-toggle="collapse">
                           <i class="glyphicon glyphicon-chevron-up color-questeionario"></i>
                         </a>
@@ -331,35 +327,21 @@
                     <li class="list-group-item">
                       <h3>
                         <i class="glyphicon glyphicon-bell color-questeionario"></i>&nbsp;
-<<<<<<< HEAD
                         <label class="title-questionario">
                           <b>Questionário</b>
                         </label>
-=======
-                        <label class="title-questionario">Questionário</label>
->>>>>>> c8054188efa7339c99213bbaca358e6b3dbefed7
                         <a href="#questionario" data-toggle="collapse">
                           <i class="glyphicon glyphicon-chevron-up color-questeionario"></i>
                         </a>
                       </h3>
                     </li>
                     <li class="list-group-item box-questoes">
-<<<<<<< HEAD
                       <div class="collapse col-xs-12" style="overflow-y: scroll !important;" id="questionario">
-=======
-
-                      <div id="questionario" class="col-xs-12">
-
->>>>>>> c8054188efa7339c99213bbaca358e6b3dbefed7
                         <div class="form-group" ng-repeat="questao in ctrl.questoes">
 
                           <label class="label-questionario">{{questao.titulo}}
                             <span class="required avoidPageBreak">*</span>
-<<<<<<< HEAD
                             <span class="far fa-lightbulb" title=""></span>
-=======
-                            <span class="glyphicons glyphicons-lightbulb" title=""></span>
->>>>>>> c8054188efa7339c99213bbaca358e6b3dbefed7
                           </label>
 
 
@@ -372,7 +354,6 @@
                           </select>
 
                           <div class="form-group row" ng-if="questao.tipo == 'Gravacao'">
-<<<<<<< HEAD
                             <div class="col-xs-12">
                               <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="{{questao.titulo}}">
                             </div>
@@ -388,33 +369,12 @@
                               </a>
                             </div>
                             <div class="col-xs-2" style="padding-left: 0px; padding-top: 5px;">
-=======
-                            <div class="col-xs-5">
-                              <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="{{questao.titulo}}">
-                            </div>
-                            <div class="col-xs-3">
-                              <a data-toggle="tooltip" title="Tirar Foto" ng-click="ctrl.tirarPrint(questao);">
-                                <span class="glyphicon glyphicon-camera glyphicon-larger" aria-hidden="true"></span>
-                              </a>
-                              <a data-toggle="tooltip" title="Gravar Vídeo" ng-click="ctrl.gravarVideo(questao)" ng-if="!questao.gravando">
-                                <span class="glyphicon glyphicon-film glyphicon-larger" aria-hidden="true"></span>
-                              </a>
-                              <a data-toggle="tooltip" title="Parar Gravação" ng-click="ctrl.pararGravacao(questao)" ng-if="questao.gravando">
-                                <span class="glyphicon glyphicon-stop glyphicon-larger" aria-hidden="true"></span>
-                              </a>
-                            </div>
-                            <div class="col-xs-2">
->>>>>>> c8054188efa7339c99213bbaca358e6b3dbefed7
                               <button type="button" class="btn btn-warning" data-toggle="tooltip" title="Parar Gravação" ng-click="ctrl.abrirDocumentos(questao)">
                                 <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> &nbsp; Anexos
                                 <span class="badge badge-green ">{{questao.documentos.length}}</span>
                               </button>
                             </div>
                           </div>
-<<<<<<< HEAD
-=======
-
->>>>>>> c8054188efa7339c99213bbaca358e6b3dbefed7
                         </div>
                       </div>
 

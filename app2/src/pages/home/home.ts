@@ -41,6 +41,8 @@ export class HomePage implements OnInit {
     let constraints = {
       audio: true,
       video: {
+        // width: 1920,
+        // height: 1080,
         facingMode: false ? "user" : "environment"
       }
     };

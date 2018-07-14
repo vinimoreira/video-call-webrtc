@@ -3,7 +3,7 @@
     <name>Confitec - VideoCall</name>
     <description>Aplicativo de VideoConferencia da Confitec</description>
     <author email="vinicius.silva@confitec.com.br" href="http://www.confitec.com.br">Confitec TEAM!</author>
-    <content original-src="index.html" src="http://172.16.22.177:8100" />
+    <content src="index.html" />
     <access allows-arbitrary-loads-in-media="true" allows-arbitrary-loads-in-web-content="true" allows-local-networking="true" minimum-tls-version="TLSv1.0" origin="*" requires-certificate-transparency="false" requires-forward-secrecy="false" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -88,4 +88,5 @@
     <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
     <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
     <plugin name="cordova.plugins.diagnostic" spec="^4.0.5" />
+    <allow-navigation href="http://172.16.22.132:8100" />
 </widget>

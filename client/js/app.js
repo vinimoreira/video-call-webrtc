@@ -26,8 +26,10 @@ const peerConnectionConfig = {
       var points = [];
 
       ctrl.uuid;
-      ctrl.width = 480;
-      ctrl.height = 268;
+      // ctrl.width = 600;
+      // ctrl.height = 340;
+      ctrl.width = 300;
+      ctrl.height = 400;
 
       $scope.chamada_iniciada = false;
       ctrl.anexos = [];
@@ -95,8 +97,8 @@ const peerConnectionConfig = {
           uuid: ctrl.uuid
         });
 
-          //Animation do print
-          angular.element("#remoteVideo").animate({
+        //Animation do print
+        angular.element("#remoteVideo").animate({
             opacity: 0.3
           },
           function () {
@@ -409,7 +411,6 @@ const peerConnectionConfig = {
       }
 
       function socketReceivePhoto(data) {
-        debugger;
         ctrl.questoes[2].documentos.push({
           type: "Imagem",
           src: new Blob([new Uint8Array(data.blob)])

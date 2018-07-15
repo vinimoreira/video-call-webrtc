@@ -164,8 +164,24 @@
     a {
       text-decoration: none !important;
     }
+
     .glyphicon-larger {
       font-size: xx-large;
+    }
+
+    .modal-body {
+      overflow-y: auto;
+      max-height: 800px;
+    }
+
+    .box-inspecao {
+      min-height: 600px;
+    }
+
+    #canvas-camera,
+    #remoteVideo {
+      width: 300px;
+      height: 400px;
     }
   </style>
 
@@ -192,7 +208,7 @@
                         <h3>
                           <i class="glyphicon glyphicon-bell color-questeionario"></i>&nbsp;
                           <label class="title-questionario">
-                            <b>Inspeção 12568</b>
+                            <b>Inspeção 12568 - {{ctrl.uuid}}</b>
                           </label>
                           <a href="#inspecao" data-toggle="collapse">
                             <i class="glyphicon glyphicon-chevron-up color-questeionario"></i>
@@ -200,23 +216,28 @@
                         </h3>
                       </li>
                       <li class="list-group-item box-questoes">
-                        <div class="collapse" id="inspecao">
-                          <div class="col-xs-12">
-                            <div class="form-group">
-                              <label class="col-xs-12 text-color">Segurado:
-                                <br> Luiz Antonio da Silva Soares</label>
-                            </div>
-                            <div class="form-group">
-                              <label class="col-xs-6 text-color">Ramo:
-                                <br> 0118 - COMPREENSIVO EMPRESARIAL</label>
-                              <label class="col-xs-6 text-color">Modalidade:
-                                <br> 0 - PORTO EMPRESA</label>
-                            </div>
-                            <div class="row text-center" style="height: 20%;">
-                              <h2 class="label-questionario">PIN: {{ctrl.uuid}}</h2>
-                            </div>
-                            <div class="col-xs-9">
+                        <div class="col-xs-12 box-inspecao" id="inspecao">
+                          <div class="form-group">
+                            <label class="col-xs-12 text-color">Segurado:
+                              <br> Luiz Antonio da Silva Soares</label>
+                          </div>
+                          <div class="form-group">
+                            <label class="col-xs-6 text-color">Ramo:
+                              <br> 0118 - COMPREENSIVO EMPRESARIAL</label>
+                            <label class="col-xs-6 text-color">Modalidade:
+                              <br> 0 - PORTO EMPRESA</label>
+                          </div>
 
+                          <div class="form-group">
+                            <br>
+                            <label>&nbsp;</label>
+                          </div>
+
+                          <div class="form-group">
+                            <div class="col-xs-5 col-xs-offset-3">
+                              <!-- <div class="row text-center" style="height: 20%;">
+                                <h2 class="label-questionario">PIN: {{ctrl.uuid}}</h2>
+                              </div> -->
                               <div class="row">
                                 <canvas id="canvas-camera" width="{{ctrl.width}}" height="{{ctrl.height}}" style="border: 1px solid" class="teste canvas-video"></canvas>
                                 <video id="remoteVideo" width="{{ctrl.width}}" height="{{ctrl.height}}" autoplay class="teste video-remote" style="border: 1px solid black;"></video>
@@ -225,7 +246,7 @@
                               </div>
 
                             </div>
-                            <div class="col-xs-3">
+                            <div class="col-xs-1">
 
                               <div class="btn-group-vertical">
                                 <button id="start" ng-click="ctrl.start(true);" class="btn btn-success" title="Iniciar Chamada" ng-show="!chamada_iniciada">
@@ -248,38 +269,6 @@
                                 </button>
                               </div>
                             </div>
-                          </div>
-                          <div class="col-xs-12" style="padding-top: 16% !important;">
-                            <ul class="list-group list-group-flush">
-                              <li class="list-group-item">
-                                <h3>
-                                  <label class="title-questionario">
-                                    <b>Local do Risco</b>
-                                  </label>
-                                  <a href="#localRisco" data-toggle="collapse">
-                                    <i class="glyphicon glyphicon-chevron-up color-questeionario"></i>
-                                  </a>
-                                </h3>
-                              </li>
-                              <li class="list-group-item box-questoes">
-                                <div class="collapse" id="localRisco">
-                                  <div class="row col-xs-12">
-                                    <div class="col-xs-6">
-                                      <label class="text-color">Endereço informado:</label>
-                                      <br>
-                                      <label class="text-color">Av Nações Unidas, 13767, 12410-450, São Paulo</label>
-                                      <div id="map"></div>
-                                    </div>
-                                    <div class="col-xs-6">
-                                      <label class="text-color">Endereço real:</label>
-                                      <br>
-                                      <label class="text-color">Av Nações Unidas, 13767, 12410-450, São Paulo</label>
-                                      <div id="map2"></div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </li>
-                            </ul>
                           </div>
                         </div>
                       </li>
@@ -376,6 +365,36 @@
                         </div>
                       </div>
 
+                    </li>
+                  </ul>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                      <h3>
+                        <label class="title-questionario">
+                          <b>Local do Risco</b>
+                        </label>
+                        <a href="#localRisco" data-toggle="collapse">
+                          <i class="glyphicon glyphicon-chevron-up color-questeionario"></i>
+                        </a>
+                      </h3>
+                    </li>
+                    <li class="list-group-item box-questoes">
+                      <div class="collapse" id="localRisco">
+                        <div class="row col-xs-12">
+                          <div class="col-xs-6">
+                            <label class="text-color">Endereço informado:</label>
+                            <br>
+                            <label class="text-color">Av Nações Unidas, 13767, 12410-450, São Paulo</label>
+                            <div id="map"></div>
+                          </div>
+                          <div class="col-xs-6">
+                            <label class="text-color">Endereço real:</label>
+                            <br>
+                            <label class="text-color">Av Nações Unidas, 13767, 12410-450, São Paulo</label>
+                            <div id="map2"></div>
+                          </div>
+                        </div>
+                      </div>
                     </li>
                   </ul>
                 </div>

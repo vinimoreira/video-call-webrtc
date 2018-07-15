@@ -37,14 +37,14 @@ const peerConnectionConfig = {
           tipo: "Text"
         },
         {
-          titulo: "Questão 2",
+          titulo: "Pergunta B",
           tipo: "Select"
         },
         {
-          titulo: "Questão 3",
+          titulo: "Pergunta C",
           tipo: "Gravacao",
           documentos: []
-        }
+        },
       ];
 
       //all your init controller goodness in here

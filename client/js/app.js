@@ -49,6 +49,19 @@ const peerConnectionConfig = {
         },
       ];
 
+      ctrl.services = [ 
+        { name:'Service A' },
+        { name:'Service B' },
+        { name:'Service C' },
+        { name:'Service D' }
+      ];
+      
+      ctrl.availability = { services:ctrl.services };
+
+      ctrl.model = {};
+
+      ctrl.model.selectedService = ctrl.services[1];
+
       //all your init controller goodness in here
       ctrl.onInit = function() {
         localVideo = document.getElementById("localVideo");

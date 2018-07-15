@@ -381,8 +381,10 @@
                             </div>
                           </div>
                         </div>
-                      </div>
-
+                        <div class="btn-group-justified">
+                            <label ng-repeat="service in ctrl.availability.services" class="btn btn-primary" ng-model="ctrl.model.selectedService" btn-radio="service">{{service.name}}</label>
+                          </div>
+                          <div>Current Selection is: {{ctrl.model.selectedService.name}}</div>
                     </li>
                   </ul>
                 </div>

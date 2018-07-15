@@ -125,7 +125,6 @@
     .glyphicon-larger {
       font-size: xx-large;
     }
-    
   </style>
 
 </head>
@@ -167,12 +166,15 @@
 
                 <!-- QUADRO DA VIDEO CHAMADA -->
                 <div class="col-xs-7">
-                  <div class="row text-center" style="height: 20%;">
-                    <h2 class="label-questionario">PIN: {{ctrl.uuid}}</h2>
-                  </div>
+
                   <div class="col-xs-9">
 
                     <div class="row">
+
+                      <div class="row text-center" style="height: 20%;">
+                        <h2 class="label-questionario">PIN: {{ctrl.uuid}}</h2>
+                      </div>
+
                       <canvas id="canvas-camera" width="{{ctrl.width}}" height="{{ctrl.height}}" style="border: 1px solid" class="teste canvas-video"></canvas>
                       <video id="remoteVideo" width="{{ctrl.width}}" height="{{ctrl.height}}" autoplay class="teste video-remote" style="border: 1px solid black;"></video>
                       <video id="localVideo" autoplay muted style="width:1px; height: 1px;"></video>

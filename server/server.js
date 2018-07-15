@@ -118,6 +118,34 @@ io.on('connection', function (socket) {
 
   });
 
+  socket.on("canvas:takePhoto", function (message) {
+
+    console.log("takePhoto");
+
+    //Valida a requisição
+    if (!requisicaoValida(socket)) {
+      socket.close();
+      return;
+    }
+
+    takePhoto(message);
+
+  });
+
+  socket.on("canvas:receivePhoto", function (message) {
+
+    console.log("receivePhoto");
+
+    //Valida a requisição
+    if (!requisicaoValida(socket)) {
+      socket.close();
+      return;
+    }
+
+    receivePhoto(message);
+
+  });
+
   sockets.push(socket);
 })
 
@@ -193,6 +221,22 @@ function canvasClean(data) {
 function criarLogErro(mensagem, erro) {
   console.warn(mensagem);
   console.log("Erro: ", erro);
+}
+
+function takePhoto(data) {
+  try {
+    enviaDadosSocket("canvas:takePhoto", data.request, data);
+  } catch (error) {
+    criarLogErro("TakePhoto: " + data.request, error);
+  }
+}
+
+function receivePhoto(data) {
+  try {
+    enviaDadosSocket("canvas:receivePhoto", data.request, data);
+  } catch (error) {
+    criarLogErro("receivePhoto: " + data.request, error);
+  }
 }
 
 console.log(

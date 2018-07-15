@@ -6,8 +6,7 @@ var socket;
 var recorder;
 var request;
 const peerConnectionConfig = {
-  iceServers: [
-    {
+  iceServers: [{
       urls: "stun:stun.stunprotocol.org:3478"
     },
     {
@@ -16,13 +15,13 @@ const peerConnectionConfig = {
   ]
 };
 
-(function(angular) {
+(function (angular) {
   "use strict";
   var myApp = angular.module("app", []);
 
   myApp.controller("QuestionarioController", [
     "$scope",
-    function($scope) {
+    function ($scope) {
       var ctrl = this;
       var points = [];
 
@@ -33,8 +32,7 @@ const peerConnectionConfig = {
       $scope.chamada_iniciada = false;
       ctrl.anexos = [];
 
-      ctrl.questoes = [
-        {
+      ctrl.questoes = [{
           titulo: "Questão 1",
           tipo: "Text"
         },
@@ -50,7 +48,7 @@ const peerConnectionConfig = {
       ];
 
       //all your init controller goodness in here
-      ctrl.onInit = function() {
+      ctrl.onInit = function () {
         localVideo = document.getElementById("localVideo");
         remoteVideo = document.getElementById("remoteVideo");
         ctrl.uuid = createUUID();
@@ -60,7 +58,7 @@ const peerConnectionConfig = {
         criaChamadaLocal();
       };
 
-      ctrl.encerrarChamada = function() {
+      ctrl.encerrarChamada = function () {
         //Emite evento de desenho
         enviarDadosSocket("call:end", {
           request: Number(request),
@@ -70,7 +68,7 @@ const peerConnectionConfig = {
         encerrarChamada();
       };
 
-      ctrl.limparPontos = function() {
+      ctrl.limparPontos = function () {
         //Limpa os campos do canvas
         limparDadosCanvas();
 
@@ -81,25 +79,27 @@ const peerConnectionConfig = {
         });
       };
 
-      ctrl.abrirDocumentos = function(pergunta) {
+      ctrl.abrirDocumentos = function (pergunta) {
         ctrl.anexos = pergunta.documentos;
         $("#anexos-perguntas").modal("show");
       };
 
-      ctrl.abrirLocalizacao = function(pergunta) {
+      ctrl.abrirLocalizacao = function (pergunta) {
         $("#modal-localizacao").modal("show");
       };
 
-      ctrl.tirarPrint = function(questao) {
-        var video = document.getElementById("remoteVideo");
-        var canvas_print = document.getElementById("canvas-print");
+      ctrl.tirarPrint = function (questao) {
 
-        //Animation do print
-        angular.element("#remoteVideo").animate(
-          {
+        enviarDadosSocket("canvas:takePhoto", {
+          request: Number(request),
+          uuid: ctrl.uuid
+        });
+
+          //Animation do print
+          angular.element("#remoteVideo").animate({
             opacity: 0.3
           },
-          function() {
+          function () {
             //call when the animation is complete
             angular.element("#remoteVideo").animate({
               opacity: 1
@@ -107,34 +107,16 @@ const peerConnectionConfig = {
           }
         );
 
-        // canvas_print.height = video.height;
-        // canvas_print.width = video.width;
-
-        canvas_print.height = 1080;
-        canvas_print.width = 1920;
-
-        var ctx = canvas_print.getContext("2d");
-        // ctx.drawImage(video, 0, 0, video.width, video.height);
-        ctx.drawImage(video, 0, 0, 1920, 1080);
-
-        var dataURL = ctx.canvas.toBlob(function(blob) {
-          questao.documentos.push({
-            type: "Imagem",
-            src: blob
-          });
-          $scope.$apply();
-        });
       };
 
-      ctrl.gravarVideo = function(questao) {
-        debugger;
+      ctrl.gravarVideo = function (questao) {
         questao.gravando = true;
         recorder.startRecording();
       };
 
-      ctrl.pararGravacao = function(questao) {
+      ctrl.pararGravacao = function (questao) {
         questao.gravando = false;
-        recorder.stopRecording(function(url) {
+        recorder.stopRecording(function (url) {
           questao.documentos.push({
             type: "Video",
             src: url
@@ -143,11 +125,11 @@ const peerConnectionConfig = {
         });
       };
 
-      ctrl.downloadVideo = function(url) {
+      ctrl.downloadVideo = function (url) {
         var xhr = new XMLHttpRequest();
         xhr.responseType = "blob";
 
-        xhr.onload = function() {
+        xhr.onload = function () {
           var recoveredBlob = xhr.response;
           var reader = new FileReader();
           saveAs(xhr.response, "teste.webm");
@@ -157,11 +139,11 @@ const peerConnectionConfig = {
         xhr.send();
       };
 
-      ctrl.downloadImagem = function(blob) {
+      ctrl.downloadImagem = function (blob) {
         saveAs(blob, "image.png");
       };
 
-      ctrl.start = function() {
+      ctrl.start = function () {
         changeCallStatus(true);
         start(true);
       };
@@ -192,7 +174,7 @@ const peerConnectionConfig = {
         if (signal.sdp) {
           peerConnection
             .setRemoteDescription(new RTCSessionDescription(signal.sdp))
-            .then(function() {
+            .then(function () {
               // Only create answers in response to offers
               if (signal.sdp.type == "offer") {
                 peerConnection
@@ -236,7 +218,7 @@ const peerConnectionConfig = {
 
         peerConnection
           .setLocalDescription(description)
-          .then(function() {
+          .then(function () {
             //Notifica o inicio da chamada
             enviarDadosSocket("call:start", {
               sdp: peerConnection.localDescription,
@@ -267,13 +249,8 @@ const peerConnectionConfig = {
           mimeType: "video/webm",
           //audioBitsPerSecond: 192000,
           video: {
-            // width: 1280,
-            // height: 720
-            // --
             width: 1920,
             height: 1080
-            // width: 3840,
-            // height: 2160
           },
           ignoreMutedMedia: false,
           recorderType: MediaStreamRecorder || CanvasRecorder || StereoAudioRecorder
@@ -295,7 +272,7 @@ const peerConnectionConfig = {
           prevX,
           prevY;
 
-        canvas_camera.onmousedown = function(e) {
+        canvas_camera.onmousedown = function (e) {
           var pos = getXY(e);
 
           prevX = pos.x;
@@ -310,7 +287,7 @@ const peerConnectionConfig = {
           isDown = true;
         };
 
-        canvas_camera.onmousemove = function(e) {
+        canvas_camera.onmousemove = function (e) {
           if (!isDown) return;
 
           var pos = getXY(e);
@@ -335,7 +312,7 @@ const peerConnectionConfig = {
           points[points.length - 1].push([pos.x, pos.y]);
         };
 
-        canvas_camera.onmouseup = function() {
+        canvas_camera.onmouseup = function () {
           isDown = false;
 
           //Emite evento de desenho
@@ -371,11 +348,13 @@ const peerConnectionConfig = {
         ctx_other.font = '15px "Arial"';
 
         /// get a stroke
-        for (var i = 0, t, p, pts; (pts = points[i]); i++) {
+        for (var i = 0, t, p, pts;
+          (pts = points[i]); i++) {
           /// render stroke
           ctx_other.beginPath();
           ctx_other.moveTo(pts[0][0], pts[0][1]);
-          for (t = 1; (p = pts[t]); t++) {
+          for (t = 1;
+            (p = pts[t]); t++) {
             ctx_other.lineTo(p[0], p[1]);
           }
           ctx_other.stroke();
@@ -403,25 +382,72 @@ const peerConnectionConfig = {
         });
 
         //Resposta dos eventos
-        socket.on("call:start", function(data) {
+        socket.on("call:start", function (data) {
           socketCall(data);
         });
 
-        socket.on("call:ICECandidate", function(data) {
+        socket.on("call:ICECandidate", function (data) {
           socketICE(data);
         });
 
-        socket.on("call:end", function(data) {
+        socket.on("call:end", function (data) {
           socketCallEnd(data);
         });
 
-        socket.on("canvas:clean", function(data) {
+        socket.on("canvas:clean", function (data) {
           socketCanvasClean(data);
         });
 
-        socket.on("canvas:draw", function(data) {
+        socket.on("canvas:draw", function (data) {
           socketCanvasDraw(data);
         });
+
+        socket.on("canvas:receivePhoto", function (data) {
+          socketReceivePhoto(data);
+        });
+
+      }
+
+      function socketReceivePhoto(data) {
+        debugger;
+        ctrl.questoes[2].documentos.push({
+          type: "Imagem",
+          src: new Blob([new Uint8Array(data.blob)])
+        });
+        $scope.$apply();
+        // var video = document.getElementById("remoteVideo");
+        // var canvas_print = document.getElementById("canvas-print");
+
+        // //Animation do print
+        // angular.element("#remoteVideo").animate(
+        //   {
+        //     opacity: 0.3
+        //   },
+        //   function() {
+        //     //call when the animation is complete
+        //     angular.element("#remoteVideo").animate({
+        //       opacity: 1
+        //     });
+        //   }
+        // );
+
+        // // canvas_print.height = video.height;
+        // // canvas_print.width = video.width;
+
+        // canvas_print.height = 1080;
+        // canvas_print.width = 1920;
+
+        // var ctx = canvas_print.getContext("2d");
+        // // ctx.drawImage(video, 0, 0, video.width, video.height);
+        // ctx.drawImage(video, 0, 0, 1920, 1080);
+
+        // var dataURL = ctx.canvas.toBlob(function(blob) {
+        //   questao.documentos.push({
+        //     type: "Imagem",
+        //     src: blob
+        //   });
+        //   $scope.$apply();
+        // });
       }
 
       function socketICE(data) {
@@ -477,6 +503,19 @@ const peerConnectionConfig = {
         //Chama o método que limpa os dados
         desenharPontos(data);
       }
+
+      function receivePhoto(data) {
+        //Verfico a Conexao
+        verificaConexao();
+
+        // Ignore messages from ourself
+        if (data.uuid == ctrl.uuid) return;
+
+        //Chama o método que limpa os dados
+        desenharPontos(data);
+      }
+
+      receivePhoto
 
       function verificaConexao() {
         //Verifica se já está estabelicida a conexão

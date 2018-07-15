@@ -1,0 +1,3 @@
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore irisk-videocall.keystore  D:\Projetos\Confitec\POCS\video-call-webrtc\app2\platforms\android\app\build\outputs\apk\release\app-release-unsigned.apk irisk-videocall
+
+C:\Users\Vinicius\AppData\Local\Android\Sdk\build-tools\26.0.0\zipalign 4 D:\Projetos\Confitec\POCS\video-call-webrtc\app2\platforms\android\app\build\outputs\apk\release\app-release-unsigned.apk irisk-videocall.apk

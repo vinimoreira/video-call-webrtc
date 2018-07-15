@@ -23,26 +23,53 @@
 
 </ion-content> -->
 
-<ion-content no-bounce padding>
-  <div col-12 id="video-content">
+<ion-content no-bounce no-padding>
+  <div col-12 id="video-content" (click)="showButton();">
+    <canvas #canvasPrint style="display: none;height: 100%;width: 100%"></canvas>
     <canvas #myCanvas class="canvas" width="300" height="400" style="border: 1px solid;"></canvas>
     <video id="my-video" width="300" height="400" muted="true" class="my-video"></video>
     <video id="other-video" autoplay></video>
   </div>
+
+
+
 </ion-content>
 
 <ion-footer text-center>
-  <ion-list>
-    <ion-item>
-      <ion-label color="primary" stacked>Numero</ion-label>
-      <ion-input type="number" placeholder="Numero" [(ngModel)]="callerId"></ion-input>
-    </ion-item>
-  </ion-list>
 
-  <ion-row>
-    <button col-5 offset-1 ion-button color="secondary" (click)="startCall()">Chamar</button>
-    <button col-5 ion-button color="danger" (click)="stopCall()">Desligar</button>
-  </ion-row>
-  <br>
+  <div class="row row-bottom" text-center col-12 *ngIf="showButtons">
+
+    <div offset-5 text-center *ngIf="tipoBotao == 1">
+      <button ion-button color="primary" class="btn-circle" (click)="showKeypad()">
+        <ion-icon name="keypad"></ion-icon>
+      </button>
+    </div>
+
+    <div offset-5 text-center *ngIf="tipoBotao == 3">
+      <button ion-button color="danger" class="btn-circle" (click)="stopCall()">
+        <ion-icon name="call"></ion-icon>
+      </button>
+    </div>
+
+  </div>
+
+  <div *ngIf="tipoBotao == 2" class="keypad">
+    <ion-list>
+      <ion-item>
+        <ion-label color="primary" stacked>Numero</ion-label>
+        <ion-input type="number" placeholder="Numero" [(ngModel)]="callerId"></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <ion-row>
+      <button col-5 offset-1 ion-button color="secondary" (click)="startCall()">
+        <ion-icon name="call"></ion-icon>&nbsp;Chamar
+      </button>
+      <button col-5 ion-button color="light" (click)="voltar()">
+        <ion-icon name="md-arrow-back"></ion-icon>&nbsp;Voltar
+      </button>
+    </ion-row>
+    <br>
+  </div>
 
 </ion-footer>

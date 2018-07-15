@@ -47,20 +47,20 @@ const peerConnectionConfig = {
           tipo: "Gravacao",
           documentos: []
         },
+        {
+          titulo: "Pergunta D",
+          tipo: "SelecaoMultipla"
+        }
       ];
 
-      ctrl.services = [ 
-        { name:'Service A' },
-        { name:'Service B' },
-        { name:'Service C' },
-        { name:'Service D' }
+      var services = [ 
+        { name:'Resposta A' },
+        { name:'Resposta B' },
+        { name:'Resposta C' },
+        { name:'Resposta D' }
       ];
       
-      ctrl.availability = { services:ctrl.services };
-
-      ctrl.model = {};
-
-      ctrl.model.selectedService = ctrl.services[1];
+      ctrl.availability = { services:services };
 
       //all your init controller goodness in here
       ctrl.onInit = function() {

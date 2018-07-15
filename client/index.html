@@ -63,7 +63,7 @@
     .label-questionario {
       color: #5a6978;
       font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
-      font-weight: 700;
+      font-weight: 200;
       line-height: 1.471;
     }
 
@@ -174,6 +174,40 @@
       display: inline-block !important;
       width: 70%;
     }
+
+    .questionario-button {
+      margin: 4px;
+      background-color: #fff;
+      border-radius: 5px;
+      border: 1px solid #9CA6AF;
+      overflow: none;
+      float: left;
+      font-family: "Helvetica Neue", Arial, "Droid Sans", sans-serif;
+      margin-top: 1%;
+      text-align: center;
+    }
+
+    .questionario-button label {
+      float: left;
+    }
+
+    .questionario-button label span {
+      text-align: center;
+      padding: 10px 15px;
+      display: block;
+      font-size: 14px;
+      color: #9CA6AF;
+    }
+
+    .questionario-button label input {
+      position: absolute;
+      top: -20px;
+    }
+
+    .questionario-button input:checked+span {
+      background-color: #9CA6AF;
+      color: #fff;
+    }
   </style>
 
 </head>
@@ -220,7 +254,7 @@
                                 <br> 0 - PORTO EMPRESA</label>
                             </div>
                             <div class="row text-center" style="height: 20%;">
-                              <h2 class="label-questionario">PIN: {{ctrl.uuid}}</h2>
+                              <h2><b>PIN: {{ctrl.uuid}}</b></h2>
                             </div>
                             <div class="col-xs-9">
 
@@ -303,7 +337,7 @@
                           <b>Enquadramento</b>
                         </label>
                         <a href="#enquadramento" data-toggle="collapse">
-                          <i class="glyphicon glyphicon-chevron-up color-questeionario" style="text-align: right !important; display: inline-block !important; width: 70%;"></i>
+                          <i class="glyphicon glyphicon-chevron-up color-questeionario" style="text-align: right !important; display: inline-block !important; width: 67%;"></i>
                         </a>
                       </h3>
                     </li>
@@ -336,7 +370,7 @@
                           <b>Questionário</b>
                         </label>
                         <a href="#questionario" data-toggle="collapse">
-                          <i class="glyphicon glyphicon-chevron-up color-questeionario" style="text-align: right !important; display: inline-block !important; width: 75%;"></i>
+                          <i class="glyphicon glyphicon-chevron-up color-questeionario" style="text-align: right !important; display: inline-block !important; width: 72%;"></i>
                         </a>
                       </h3>
                     </li>
@@ -345,7 +379,6 @@
                         <div class="form-group" ng-repeat="questao in ctrl.questoes">
 
                           <label class="label-questionario">{{questao.titulo}}
-                            <span class="required avoidPageBreak">*</span>
                             <span class="far fa-lightbulb" title=""></span>
                           </label>
 
@@ -363,8 +396,8 @@
                               <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="{{questao.titulo}}">
                             </div>
                             <div class="col-xs-2" style="padding-left: 5%; padding-top: 5px; padding-right: 0px;">
-                              <a data-toggle="tooltip" title="Tirar Foto" ng-click="ctrl.tirarPrint(questao);">
-                                <i class="glyphicon glyphicon-camera icon-color" style="font-size: 200%" aria-hidden="true"></i>
+                              <a data-toggle="tooltip" title="Tirar Foto" ng-click="ctrl.tirarPrint(questao);" style="padding-right: 10px;">
+                                <i class="glyphicon glyphicon-camera icon-color" style="font-size: 200%; line-height: 1.1;" aria-hidden="true"></i>
                               </a>
                               <a data-toggle="tooltip" title="Gravar Vídeo" ng-click="ctrl.gravarVideo(questao)" ng-if="!questao.gravando">
                                 <i class="glyphicon glyphicon-film icon-color" style="font-size: 180%" aria-hidden="true"></i>
@@ -374,80 +407,87 @@
                               </a>
                             </div>
                             <div class="col-xs-2" style="padding-left: 0px; padding-top: 5px;">
-                              <button type="button" class="btn btn-warning" data-toggle="tooltip" title="Parar Gravação" ng-click="ctrl.abrirDocumentos(questao)">
+                              <button type="button" class="btn btn-warning" data-toggle="tooltip" ng-click="ctrl.abrirDocumentos(questao)">
                                 <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> &nbsp; Anexos
                                 <span class="badge badge-green ">{{questao.documentos.length}}</span>
                               </button>
                             </div>
                           </div>
-                        </div>
-                        <div class="btn-group-justified">
-                            <label ng-repeat="service in ctrl.availability.services" class="btn btn-primary" ng-model="ctrl.model.selectedService" btn-radio="service">{{service.name}}</label>
+
+                          <div class="form-group row" ng-if="questao.tipo == 'SelecaoMultipla'">
+                            <div class="btn-group-justified" style="padding-left: 15px;">
+                              <div id="selecao-mutipla" class="questionario-button" ng-repeat="resposta in ctrl.availability.services">
+                                <label style="margin-bottom: 0px !important;">
+                                  <input type="checkbox" id="cbk{{ resposta.name }}" class="visible-input">
+                                  <span>{{ resposta.name }}</span>
+                                </label>
+                              </div>
+                            </div>
                           </div>
-                          <div>Current Selection is: {{ctrl.model.selectedService.name}}</div>
+                        </div>
+                    </li>
+                  </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+              <button type="button" class="btn btn-primary">Salvar</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
+
+
+      <div class="modal fade" id="anexos-perguntas" tabindex="-1" role="dialog" aria-labelledby="anexos-perguntas" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Documentos</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+
+              <div class="row">
+                <div class="col-xs-12">
+                  <b>Videos</b>
+
+                  <ul class="list-group">
+                    <li ng-repeat="anexo in ctrl.anexos | filter:{type : 'Video'}" class="list-group-item">
+                      <a ng-click="ctrl.downloadVideo(anexo.src)"> Video {{($index + 1 )}}</a>
+                    </li>
+                  </ul>
+
+                </div>
+              </div>
+
+              <br>
+              <div class="row">
+                <div class="col-xs-12">
+                  <b>Imagens</b>
+                  <ul class="list-group">
+                    <li ng-repeat="anexo in ctrl.anexos | filter:{type : 'Imagem'}" class="list-group-item">
+                      <a ng-click="ctrl.downloadImagem(anexo.src)"> Imagem {{($index + 1 )}}</a>
                     </li>
                   </ul>
                 </div>
               </div>
+
             </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-            <button type="button" class="btn btn-primary">Salvar</button>
-          </div>
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal-dialog -->
-    </div>
-    <!-- /.modal -->
-
-
-    <div class="modal fade" id="anexos-perguntas" tabindex="-1" role="dialog" aria-labelledby="anexos-perguntas" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Documentos</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-
-            <div class="row">
-              <div class="col-xs-12">
-                <b>Videos</b>
-
-                <ul class="list-group">
-                  <li ng-repeat="anexo in ctrl.anexos | filter:{type : 'Video'}" class="list-group-item">
-                    <a ng-click="ctrl.downloadVideo(anexo.src)"> Video {{($index + 1 )}}</a>
-                  </li>
-                </ul>
-
-              </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
             </div>
-
-            <br>
-            <div class="row">
-              <div class="col-xs-12">
-                <b>Imagens</b>
-                <ul class="list-group">
-                  <li ng-repeat="anexo in ctrl.anexos | filter:{type : 'Imagem'}" class="list-group-item">
-                    <a ng-click="ctrl.downloadImagem(anexo.src)"> Imagem {{($index + 1 )}}</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- <div class="modal fade" id="modal-localizacao" tabindex="-1" role="dialog" aria-labelledby="modal-localizacao" aria-hidden="true">
+      <!-- <div class="modal fade" id="modal-localizacao" tabindex="-1" role="dialog" aria-labelledby="modal-localizacao" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -469,61 +509,61 @@
     </div> -->
 
 
-  </div>
+    </div>
 
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
 
-  <script src="resources/tools/angular/angular.min.js"></script>
-  <script src="resources/js/app.js"></script>
+    <script src="resources/tools/angular/angular.min.js"></script>
+    <script src="resources/js/app.js"></script>
 
-  <!-- Latest compiled and minified JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-    crossorigin="anonymous"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+      crossorigin="anonymous"></script>
 
-  <script src="https://cdn.webrtc-experiment.com/MultiStreamsMixer.min.js"></script>
-  <script src="https://cdn.webrtc-experiment.com/screenshot.js"></script>
-  <script src="https://cdn.webrtc-experiment.com/RecordRTC.js"></script>
-  <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-  <script src="resources/tools/File-Saver/FileSaver.min.js"></script>
+    <script src="https://cdn.webrtc-experiment.com/MultiStreamsMixer.min.js"></script>
+    <script src="https://cdn.webrtc-experiment.com/screenshot.js"></script>
+    <script src="https://cdn.webrtc-experiment.com/RecordRTC.js"></script>
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    <script src="resources/tools/File-Saver/FileSaver.min.js"></script>
 
-  <script>
-    function initMap() {
-      var myLatLng = {
-        lat: -23.6197663,
-        lng: -46.6997618
-      };
+    <script>
+      function initMap() {
+        var myLatLng = {
+          lat: -23.6197663,
+          lng: -46.6997618
+        };
 
-      var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 18,
-        center: myLatLng
-      });
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 18,
+          center: myLatLng
+        });
 
-      var map2 = new google.maps.Map(document.getElementById('map2'), {
-        zoom: 18,
-        center: myLatLng
-      });
+        var map2 = new google.maps.Map(document.getElementById('map2'), {
+          zoom: 18,
+          center: myLatLng
+        });
 
-      var marker = new google.maps.Marker({
-        position: myLatLng,
-        map: map,
-        title: 'Localização'
-      });
+        var marker = new google.maps.Marker({
+          position: myLatLng,
+          map: map,
+          title: 'Localização'
+        });
 
-      var marker2 = new google.maps.Marker({
-        position: myLatLng,
-        map: map2,
-        title: 'Localização'
-      });
-    }
-  </script>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCDsTfyz9Jdi9SD9x5mmgk5CD3B8yLpDMs&callback=initMap">
-  </script>
+        var marker2 = new google.maps.Marker({
+          position: myLatLng,
+          map: map2,
+          title: 'Localização'
+        });
+      }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCDsTfyz9Jdi9SD9x5mmgk5CD3B8yLpDMs&callback=initMap">
+    </script>
 
-  <!-- <script src="resources/js/webrtc.js"></script> -->
-  <!-- 
+    <!-- <script src="resources/js/webrtc.js"></script> -->
+    <!-- 
   <script type="text/javascript">
     pageReady();
   </script> -->

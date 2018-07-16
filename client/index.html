@@ -135,12 +135,12 @@
 
     #map {
       height: 200px;
-      width: 250px;
+      width: 340px;
     }
 
     #map2 {
       height: 200px;
-      width: 250px;
+      width: 340px;
     }
 
     select {
@@ -238,13 +238,22 @@
       color: #fff;
     }
 
-    .arrow-rigth {
+    .arrow-right {
       position: absolute;
       right: 15px;
     }
 
     .span-color {
       color: #5a6978;
+    }
+
+    .margin-top-bottom {
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+
+    select:disabled {
+      background: #dddddd;
     }
   </style>
 
@@ -268,12 +277,12 @@
                   <div class="col-xs-12">
                     <ul class="list-group list-group-flush">
                       <li class="list-group-item">
-                        <h3>
+                        <h3 class="margin-top-bottom">
                           <i class="glyphicon glyphicon-bell color-questeionario"></i>&nbsp;
                           <label class="title-questionario">
                             <b>Inspeção 12568</b>
                           </label>
-                          <a href="#inspecao" data-toggle="collapse" class="arrow-rigth">
+                          <a href="#inspecao" data-toggle="collapse" class="arrow-right">
                             <i class="glyphicon glyphicon-chevron-up color-questeionario"></i>
                           </a>
                         </h3>
@@ -342,299 +351,337 @@
                                 </div>
                               </div>
                             </div>
+                          </div>
+
+                        </div>
                       </li>
                     </ul>
-                    </div>
-                    </div>
-
-                    <div class="card col-xs-5">
-                      <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                          <h3>
-                            <i class="glyphicon glyphicon-bell color-questeionario"></i>&nbsp;
-                            <label class="title-questionario">
-                              <b>Enquadramento</b>
-                            </label>
-                            <a href="#enquadramento" data-toggle="collapse" class="arrow-rigth">
-                              <i class="glyphicon glyphicon-chevron-up color-questeionario"></i>
-                            </a>
-                          </h3>
-                        </li>
-                        <li class="list-group-item">
-                          <div class="form-group" id="enquadramento">
-                            <div class="block">
-                              <label for="informado" class="text-color form-label">
-                                <span class="span-color">Informado:</span>
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item">
+                        <h3 class="margin-top-bottom">
+                          <i class="glyphicon glyphicon-bell color-questeionario"></i>&nbsp;
+                          <label class="title-questionario">
+                            <b>Local do Risco</b>
+                          </label>
+                          <a href="#localRisco" data-toggle="collapse" class="arrow-right">
+                            <i class="glyphicon glyphicon-chevron-down color-questeionario"></i>
+                          </a>
+                        </h3>
+                      </li>
+                      <li class="list-group-item box-questoes">
+                        <div class="collapse" id="localRisco">
+                          <div class="row col-xs-12">
+                            <div class="col-xs-6">
+                              <label class="text-color">
+                                <span class="span-color">Endereço informado:</span>
                               </label>
-                              <select class="text-color form-input" id="informado" name="informado">
-                                <option>1061 - SUPERMECADO</option>
-                                <option>1063 - SALÃO DE BELEZA</option>
-                                <option>1064 - HOSPITAL</option>
-                              </select>
+                              <br>
+                              <label class="text-color">Av Nações Unidas, 13767, 12410-450, São Paulo</label>
+                              <div id="map"></div>
                             </div>
-                            <div>
-                              <label for="Real" class="text-color form-label">
-                                <span class="span-color">Real:</span>
+                            <div class="col-xs-6">
+                              <label class="text-color">
+                                <span class="span-color">Endereço real:</span>
                               </label>
-                              <select class="text-color form-input" id="Real" name="Real">
-                                <option>1063 - SALÃO DE BELEZA</option>
-                                <option>1061 - SUPERMECADO</option>
-                                <option>1064 - HOSPITAL</option>
-                              </select>
+                              <br>
+                              <label class="text-color">Av Nações Unidas, 13767, 12410-450, São Paulo</label>
+                              <div id="map2"></div>
                             </div>
                           </div>
-                        </li>
-                      </ul>
-                      <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                          <h3>
-                            <i class="glyphicon glyphicon-bell color-questeionario"></i>&nbsp;
-                            <label class="title-questionario">
-                              <b>Questionário</b>
-                            </label>
-                            <a href="#questionario" data-toggle="collapse" class="arrow-rigth">
-                              <i class="glyphicon glyphicon-chevron-down color-questeionario"></i>
-                            </a>
-                          </h3>
-                        </li>
-                        <li class="list-group-item box-questoes">
-                          <div class="collapse col-xs-12" style="overflow-y: auto;" id="questionario">
-                            <div class="form-group" ng-repeat="questao in ctrl.questoes">
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
 
-                              <label class="label-questionario">{{questao.titulo}}
-                                <span class="far fa-lightbulb" title=""></span>
-                              </label>
+                <div class="card col-xs-5">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                      <h3 class="margin-top-bottom">
+                        <i class="glyphicon glyphicon-bell color-questeionario"></i>&nbsp;
+                        <label class="title-questionario">
+                          <b>Enquadramento</b>
+                        </label>
+                        <a href="#enquadramento" data-toggle="collapse" class="arrow-right">
+                          <i class="glyphicon glyphicon-chevron-up color-questeionario"></i>
+                        </a>
+                      </h3>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="form-group" id="enquadramento">
+                        <div class="block">
+                          <label for="informado" class="text-color form-label">
+                            <span class="span-color">Informado:</span>
+                          </label>
+                          <select class="text-color form-input" id="informado" name="informado" disabled>
+                            <option>1061 - SUPERMECADO</option>
+                            <option>1063 - SALÃO DE BELEZA</option>
+                            <option>1064 - HOSPITAL</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label for="Real" class="text-color form-label">
+                            <span class="span-color">Real:</span>
+                          </label>
+                          <select class="text-color form-input" id="Real" name="Real">
+                            <option>1063 - SALÃO DE BELEZA</option>
+                            <option>1061 - SUPERMECADO</option>
+                            <option>1064 - HOSPITAL</option>
+                          </select>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                      <h3 class="margin-top-bottom">
+                        <i class="glyphicon glyphicon-bell color-questeionario"></i>&nbsp;
+                        <label class="title-questionario">
+                          <b>Questionário</b>
+                        </label>
+                        <a href="#questionario" data-toggle="collapse" class="arrow-right">
+                          <i class="glyphicon glyphicon-chevron-down color-questeionario"></i>
+                        </a>
+                      </h3>
+                    </li>
+                    <li class="list-group-item box-questoes">
+                      <div class="collapse col-xs-12" style="overflow-y: auto;" id="questionario">
+                        <div class="form-group" ng-repeat="questao in ctrl.questoes">
+
+                          <label class="label-questionario">{{questao.titulo}}
+                            <span class="far fa-lightbulb" title=""></span>
+                          </label>
 
 
-                              <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="{{questao.titulo}}" ng-if="questao.tipo == 'Text'">
+                          <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="{{questao.titulo}}" ng-if="questao.tipo == 'Text'">
 
-                              <select class="form-control" ng-if="questao.tipo == 'Select'">
-                                <option>Questão 1</option>
-                                <option>Questão 2</option>
-                                <option>Questão 3</option>
-                              </select>
+                          <select class="form-control" ng-if="questao.tipo == 'Select'">
+                            <option>Questão 1</option>
+                            <option>Questão 2</option>
+                            <option>Questão 3</option>
+                          </select>
 
-                              <div class="form-group row" ng-if="questao.tipo == 'Gravacao'">
-                                <div class="col-xs-12">
-                                  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="{{questao.titulo}}">
-                                </div>
-                                <div class="col-xs-4" style="padding-left: 5%; padding-top: 5px; padding-right: 0px;">
-                                  <a data-toggle="tooltip" title="Tirar Foto" ng-click="ctrl.tirarPrint(questao);" style="padding-right: 10px;">
-                                    <i class="glyphicon glyphicon-camera icon-color" style="font-size: 200%; line-height: 1.1;" aria-hidden="true"></i>
-                                  </a>
-                                  <a data-toggle="tooltip" title="Gravar Vídeo" ng-click="ctrl.gravarVideo(questao)" ng-if="!questao.gravando">
-                                    <i class="glyphicon glyphicon-film icon-color" style="font-size: 180%" aria-hidden="true"></i>
-                                  </a>
-                                  <a data-toggle="tooltip" title="Parar Gravação" ng-click="ctrl.pararGravacao(questao)" ng-if="questao.gravando">
-                                    <i class="glyphicon glyphicon-stop icon-color" style="font-size: 200%" aria-hidden="true"></i>
-                                  </a>
-                                </div>
-                                <div class="col-xs-2" style="padding-left: 0px; padding-top: 5px;">
-                                  <button type="button" class="btn btn-warning" data-toggle="tooltip" ng-click="ctrl.abrirDocumentos(questao)">
-                                    <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> &nbsp; Anexos
-                                    <span class="badge badge-green ">{{questao.documentos.length}}</span>
-                                  </button>
-                                </div>
-                              </div>
-
-                              <div class="form-group row" ng-if="questao.tipo == 'SelecaoMultipla'">
-                                <div class="btn-group-justified" style="padding-left: 15px;">
-                                  <div id="selecao-mutipla" class="questionario-button" ng-repeat="resposta in ctrl.availability.services">
-                                    <label style="margin-bottom: 0px !important;">
-                                      <input type="checkbox" id="cbk{{ resposta.name }}" class="visible-input">
-                                      <span>{{ resposta.name }}</span>
-                                    </label>
-                                  </div>
-                                </div>
-                              </div>
+                          <div class="form-group row" ng-if="questao.tipo == 'Gravacao'">
+                            <div class="col-xs-12">
+                              <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="{{questao.titulo}}">
                             </div>
-                        </li>
-                      </ul>
-                      <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                          <h3>
-                            <i class="glyphicon glyphicon-bell color-questeionario"></i>&nbsp;
-                            <label class="title-questionario">
-                              <b>Local do Risco</b>
-                            </label>
-                            <a href="#localRisco" data-toggle="collapse" class="arrow-rigth">
-                              <i class="glyphicon glyphicon-chevron-down color-questeionario"></i>
-                            </a>
-                          </h3>
-                        </li>
-                        <li class="list-group-item box-questoes">
-                          <div class="collapse" id="localRisco">
-                            <div class="row col-xs-12">
-                              <div class="col-xs-6">
-                                <label class="text-color">
-                                  <span class="span-color">Endereço informado:</span>
+                            <div class="col-xs-4" style="padding-left: 5%; padding-top: 5px; padding-right: 0px;">
+                              <a data-toggle="tooltip" title="Tirar Foto" ng-click="ctrl.tirarPrint(questao);" style="padding-right: 10px;">
+                                <i class="glyphicon glyphicon-camera icon-color" style="font-size: 200%; line-height: 1.1;" aria-hidden="true"></i>
+                              </a>
+                              <a data-toggle="tooltip" title="Gravar Vídeo" ng-click="ctrl.gravarVideo(questao)" ng-if="!questao.gravando">
+                                <i class="glyphicon glyphicon-film icon-color" style="font-size: 180%" aria-hidden="true"></i>
+                              </a>
+                              <a data-toggle="tooltip" title="Parar Gravação" ng-click="ctrl.pararGravacao(questao)" ng-if="questao.gravando">
+                                <i class="glyphicon glyphicon-stop icon-color" style="font-size: 200%" aria-hidden="true"></i>
+                              </a>
+                            </div>
+                            <div class="col-xs-2" style="padding-left: 0px; padding-top: 5px;">
+                              <button type="button" class="btn btn-warning" data-toggle="tooltip" ng-click="ctrl.abrirDocumentos(questao)">
+                                <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> &nbsp; Anexos
+                                <span class="badge badge-green ">{{questao.documentos.length}}</span>
+                              </button>
+                            </div>
+                          </div>
+
+                          <div class="form-group row" ng-if="questao.tipo == 'SelecaoMultipla'">
+                            <div class="btn-group-justified" style="padding-left: 15px;">
+                              <div id="selecao-mutipla" class="questionario-button" ng-repeat="resposta in ctrl.availability.services">
+                                <label style="margin-bottom: 0px !important;">
+                                  <input type="checkbox" id="cbk{{ resposta.name }}" class="visible-input">
+                                  <span>{{ resposta.name }}</span>
                                 </label>
-                                <br>
-                                <label class="text-color">Av Nações Unidas, 13767, 12410-450, São Paulo</label>
-                                <div id="map"></div>
-                              </div>
-                              <div class="col-xs-6">
-                                <label class="text-color">
-                                  <span class="span-color">Endereço real:</span>
-                                </label>
-                                <br>
-                                <label class="text-color">Av Nações Unidas, 13767, 12410-450, São Paulo</label>
-                                <div id="map2"></div>
                               </div>
                             </div>
                           </div>
-                        </li>
-                      </ul>
-                      <!-- <div class="col-xs-12" style="padding-top: 16% !important;">
+                        </div>
+                    </li>
+                  </ul>
+                  <!-- <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                      <h3>
+                        <i class="glyphicon glyphicon-bell color-questeionario"></i>&nbsp;
+                        <label class="title-questionario">
+                          <b>Local do Risco</b>
+                        </label>
+                        <a href="#localRisco" data-toggle="collapse" class="arrow-right">
+                          <i class="glyphicon glyphicon-chevron-down color-questeionario"></i>
+                        </a>
+                      </h3>
+                    </li>
+                    <li class="list-group-item box-questoes">
+                      <div class="collapse" id="localRisco">
+                        <div class="row col-xs-12">
+                          <div class="col-xs-6">
+                            <label class="text-color">
+                              <span class="span-color">Endereço informado:</span>
+                            </label>
+                            <br>
+                            <label class="text-color">Av Nações Unidas, 13767, 12410-450, São Paulo</label>
+                            <div id="map"></div>
+                          </div>
+                          <div class="col-xs-6">
+                            <label class="text-color">
+                              <span class="span-color">Endereço real:</span>
+                            </label>
+                            <br>
+                            <label class="text-color">Av Nações Unidas, 13767, 12410-450, São Paulo</label>
+                            <div id="map2"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul> -->
+                  <!-- <div class="col-xs-12" style="padding-top: 16% !important;">
                       
                     </div> -->
-                      </div>
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary">Salvar</button>
-                  </div>
-                </div>
-                <!-- /.modal-content -->
-              </div>
-              <!-- /.modal-dialog -->
-            </div>
-            <!-- /.modal -->
-
-
-            <div class="modal fade" id="anexos-perguntas" tabindex="-1" role="dialog" aria-labelledby="anexos-perguntas" aria-hidden="true">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Documentos</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-
-                    <div class="row">
-                      <div class="col-xs-12">
-                        <b>Videos</b>
-
-                        <ul class="list-group">
-                          <li ng-repeat="anexo in ctrl.anexos | filter:{type : 'Video'}" class="list-group-item">
-                            <a ng-click="ctrl.downloadVideo(anexo.src)"> Video {{($index + 1 )}}</a>
-                          </li>
-                        </ul>
-
-                      </div>
-                    </div>
-
-                    <br>
-                    <div class="row">
-                      <div class="col-xs-12">
-                        <b>Imagens</b>
-                        <ul class="list-group">
-                          <li ng-repeat="anexo in ctrl.anexos | filter:{type : 'Imagem'}" class="list-group-item">
-                            <a ng-click="ctrl.downloadImagem(anexo.src)"> Imagem {{($index + 1 )}}</a>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                   </div>
                 </div>
               </div>
-            </div>
-
-            <div class="modal fade" id="modal-localizacao" tabindex="-1" role="dialog" aria-labelledby="modal-localizacao" aria-hidden="true">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Localização</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <div class="text-center">
-                      <div id="map3"></div>
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                  </div>
-                </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary">Salvar</button>
               </div>
             </div>
-
+            <!-- /.modal-content -->
           </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
 
 
-          <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
-          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-          <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+        <div class="modal fade" id="anexos-perguntas" tabindex="-1" role="dialog" aria-labelledby="anexos-perguntas" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Documentos</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
 
-          <script src="resources/tools/angular/angular.min.js"></script>
-          <script src="resources/js/app.js"></script>
+                <div class="row">
+                  <div class="col-xs-12">
+                    <b>Videos</b>
 
-          <!-- Latest compiled and minified JavaScript -->
-          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-            crossorigin="anonymous"></script>
+                    <ul class="list-group">
+                      <li ng-repeat="anexo in ctrl.anexos | filter:{type : 'Video'}" class="list-group-item">
+                        <a ng-click="ctrl.downloadVideo(anexo.src)"> Video {{($index + 1 )}}</a>
+                      </li>
+                    </ul>
 
-          <script src="https://cdn.webrtc-experiment.com/MultiStreamsMixer.min.js"></script>
-          <script src="https://cdn.webrtc-experiment.com/screenshot.js"></script>
-          <script src="https://cdn.webrtc-experiment.com/RecordRTC.js"></script>
-          <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-          <script src="resources/tools/File-Saver/FileSaver.min.js"></script>
+                  </div>
+                </div>
 
-          <script>
-            function initMap() {
-              var myLatLng = {
-                lat: -23.6197663,
-                lng: -46.6997618
-              };
+                <br>
+                <div class="row">
+                  <div class="col-xs-12">
+                    <b>Imagens</b>
+                    <ul class="list-group">
+                      <li ng-repeat="anexo in ctrl.anexos | filter:{type : 'Imagem'}" class="list-group-item">
+                        <a ng-click="ctrl.downloadImagem(anexo.src)"> Imagem {{($index + 1 )}}</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
 
-              var map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 18,
-                center: myLatLng
-              });
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
-              var map = new google.maps.Map(document.getElementById('map3'), {
-                zoom: 18,
-                center: myLatLng
-              });
+        <div class="modal fade" id="modal-localizacao" tabindex="-1" role="dialog" aria-labelledby="modal-localizacao" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Localização</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="text-center">
+                  <div id="map3"></div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
-              var map2 = new google.maps.Map(document.getElementById('map2'), {
-                zoom: 18,
-                center: myLatLng
-              });
-
-              var marker = new google.maps.Marker({
-                position: myLatLng,
-                map: map,
-                title: 'Localização'
-              });
-
-              var marker2 = new google.maps.Marker({
-                position: myLatLng,
-                map: map2,
-                title: 'Localização'
-              });
+      </div>
 
 
-              var marker3 = new google.maps.Marker({
-                position: myLatLng,
-                map: map2,
-                title: 'Localização'
-              });
-            }
-          </script>
-          <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCDsTfyz9Jdi9SD9x5mmgk5CD3B8yLpDMs&callback=initMap">
-          </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
 
-          <!-- <script src="resources/js/webrtc.js"></script> -->
-          <!-- 
+      <script src="resources/tools/angular/angular.min.js"></script>
+      <script src="resources/js/app.js"></script>
+
+      <!-- Latest compiled and minified JavaScript -->
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+      <script src="https://cdn.webrtc-experiment.com/MultiStreamsMixer.min.js"></script>
+      <script src="https://cdn.webrtc-experiment.com/screenshot.js"></script>
+      <script src="https://cdn.webrtc-experiment.com/RecordRTC.js"></script>
+      <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+      <script src="resources/tools/File-Saver/FileSaver.min.js"></script>
+
+      <script>
+        function initMap() {
+          var myLatLng = {
+            lat: -23.6197663,
+            lng: -46.6997618
+          };
+
+          var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 18,
+            center: myLatLng
+          });
+
+          var map3 = new google.maps.Map(document.getElementById('map3'), {
+            zoom: 18,
+            center: myLatLng
+          });
+
+          var map2 = new google.maps.Map(document.getElementById('map2'), {
+            zoom: 18,
+            center: myLatLng
+          });
+
+          var marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map,
+            title: 'Localização'
+          });
+
+          var marker2 = new google.maps.Marker({
+            position: myLatLng,
+            map: map2,
+            title: 'Localização'
+          });
+
+
+          var marker3 = new google.maps.Marker({
+            position: myLatLng,
+            map: map3,
+            title: 'Localização'
+          });
+        }
+      </script>
+      <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCDsTfyz9Jdi9SD9x5mmgk5CD3B8yLpDMs&callback=initMap">
+      </script>
+
+      <!-- <script src="resources/js/webrtc.js"></script> -->
+      <!-- 
   <script type="text/javascript">
     pageReady();
   </script> -->

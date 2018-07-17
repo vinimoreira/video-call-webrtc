@@ -56,14 +56,23 @@ const peerConnectionConfig = {
         }
       ];
 
-      var services = [ 
-        { name:'Resposta A' },
-        { name:'Resposta B' },
-        { name:'Resposta C' },
-        { name:'Resposta D' }
+      var services = [{
+          name: 'Resposta A'
+        },
+        {
+          name: 'Resposta B'
+        },
+        {
+          name: 'Resposta C'
+        },
+        {
+          name: 'Resposta D'
+        }
       ];
-      
-      ctrl.availability = { services:services };
+
+      ctrl.availability = {
+        services: services
+      };
 
       //all your init controller goodness in here
       ctrl.onInit = function () {
@@ -108,10 +117,8 @@ const peerConnectionConfig = {
 
       ctrl.tirarPrint = function (questao) {
 
-        enviarDadosSocket("canvas:takePhoto", {
-          request: Number(request),
-          uuid: ctrl.uuid
-        });
+        var video = document.getElementById("remoteVideo");
+        var canvas_print = document.getElementById("canvas-print");
 
         //Animation do print
         angular.element("#remoteVideo").animate({
@@ -124,6 +131,24 @@ const peerConnectionConfig = {
             });
           }
         );
+
+        canvas_print.height = video.height;
+        canvas_print.width = video.width;
+
+        // canvas_print.height = 1080;
+        // canvas_print.width = 1920;
+
+        var ctx = canvas_print.getContext("2d");
+        ctx.drawImage(video, 0, 0, video.width, video.height);
+        // ctx.drawImage(video, 0, 0, 1920, 1080);
+
+        var dataURL = ctx.canvas.toBlob(function (blob) {
+          questao.documentos.push({
+            type: "Imagem",
+            src: blob
+          });
+          $scope.$apply();
+        });
 
       };
 

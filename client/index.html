@@ -320,8 +320,12 @@
                                       <span class="span-color">Reenviar PIN:</span>
                                       <br>(11) 98878-9832</label>
                                   </div>
+                                  <div class="row"  ng-show="chamada_iniciada">
+                                    <span style="width: 200px;margin-left: 320px; color: #fff; font-weight: bold; font-size: 20px; z-index: 9999;position: relative;">{{timer_video}}</span>
+                                  </div>
                                   <canvas id="canvas-camera" width="{{ctrl.width}}" height="{{ctrl.height}}" class="teste canvas-video"></canvas>
                                   <video id="remoteVideo" width="{{ctrl.width}}" height="{{ctrl.height}}" autoplay class="teste video-remote"></video>
+                                  
                                   <video id="localVideo" autoplay muted style="width:1px; height: 1px;"></video>
                                   <canvas id="canvas-print" style="display: none;"></canvas>
                                 </div>
@@ -452,14 +456,34 @@
                             <span class="far fa-lightbulb" title=""></span>
                           </label>
 
-
+                                                    
                           <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="{{questao.titulo}}" ng-if="questao.tipo == 'Text'">
 
-                          <select class="form-control" ng-if="questao.tipo == 'Select'">
+                          <div class="form-group row" ng-if="questao.tipo == 'Select'">
+                          <select class="form-control" >
                             <option>Questão 1</option>
                             <option>Questão 2</option>
                             <option>Questão 3</option>
                           </select>
+                          <div class="col-xs-4" style="padding-left: 5%; padding-top: 5px; padding-right: 0px;">
+                            <a data-toggle="tooltip" title="Tirar Foto" ng-click="ctrl.tirarPrint(questao);" style="padding-right: 10px;">
+                              <i class="glyphicon glyphicon-camera icon-color" style="font-size: 200%; line-height: 1.1;" aria-hidden="true"></i>
+                            </a>
+                            <a data-toggle="tooltip" title="Gravar Vídeo" ng-click="ctrl.gravarVideo(questao)" ng-if="!questao.gravando">
+                              <i class="glyphicon glyphicon-film icon-color" style="font-size: 180%" aria-hidden="true"></i>
+                            </a>
+                            <a data-toggle="tooltip" title="Parar Gravação" ng-click="ctrl.pararGravacao(questao)" ng-if="questao.gravando">
+                              <i class="glyphicon glyphicon-stop icon-color" style="font-size: 200%" aria-hidden="true"></i>
+                            </a>
+                            <span ng-show="questao.gravando">{{timer}}</span>
+                          </div>
+                          <div class="col-xs-2" style="padding-left: 0px; padding-top: 5px;">
+                            <button type="button" class="btn btn-warning" data-toggle="tooltip" ng-click="ctrl.abrirDocumentos(questao)">
+                              <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> &nbsp; Anexos
+                              <span class="badge badge-green ">{{questao.documentos.length}}</span>
+                            </button>
+                          </div>
+                        </div>
 
                           <div class="form-group row" ng-if="questao.tipo == 'Gravacao'">
                             <div class="col-xs-12">
@@ -475,6 +499,7 @@
                               <a data-toggle="tooltip" title="Parar Gravação" ng-click="ctrl.pararGravacao(questao)" ng-if="questao.gravando">
                                 <i class="glyphicon glyphicon-stop icon-color" style="font-size: 200%" aria-hidden="true"></i>
                               </a>
+                              <span ng-show="questao.gravando">{{timer}}</span>
                             </div>
                             <div class="col-xs-2" style="padding-left: 0px; padding-top: 5px;">
                               <button type="button" class="btn btn-warning" data-toggle="tooltip" ng-click="ctrl.abrirDocumentos(questao)">
@@ -491,6 +516,24 @@
                                   <input type="checkbox" id="cbk{{ resposta.name }}" class="visible-input">
                                   <span>{{ resposta.name }}</span>
                                 </label>
+                              </div>
+                              <div class="col-xs-4" style="padding-top: 5px; padding-right: 0px;">
+                                <a data-toggle="tooltip" title="Tirar Foto" ng-click="ctrl.tirarPrint(questao);" style="padding-right: 10px;">
+                                  <i class="glyphicon glyphicon-camera icon-color" style="font-size: 200%; line-height: 1.1;" aria-hidden="true"></i>
+                                </a>
+                                <a data-toggle="tooltip" title="Gravar Vídeo" ng-click="ctrl.gravarVideo(questao); " ng-if="!questao.gravando">
+                                  <i class="glyphicon glyphicon-film icon-color" style="font-size: 180%" aria-hidden="true"></i>
+                                </a>
+                                <a data-toggle="tooltip" title="Parar Gravação" ng-click="ctrl.pararGravacao(questao)" ng-if="questao.gravando">
+                                  <i class="glyphicon glyphicon-stop icon-color" style="font-size: 200%" aria-hidden="true"></i>
+                                </a>
+                                <span ng-show="questao.gravando">{{timer}}</span>
+                              </div>
+                              <div class="col-xs-2" style="padding-left: 0px; padding-top: 5px;">
+                                <button type="button" class="btn btn-warning" data-toggle="tooltip" ng-click="ctrl.abrirDocumentos(questao)">
+                                  <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> &nbsp; Anexos
+                                  <span class="badge badge-green ">{{questao.documentos.length}}</span>
+                                </button>
                               </div>
                             </div>
                           </div>

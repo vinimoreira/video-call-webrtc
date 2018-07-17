@@ -320,8 +320,12 @@
                                       <span class="span-color">Reenviar PIN:</span>
                                       <br>(11) 98878-9832</label>
                                   </div>
+                                  <div class="row"  ng-show="chamada_iniciada">
+                                    <span style="width: 200px;margin-left: 320px; color: #fff; font-weight: bold; font-size: 20px;">{{timer_video}}</span>
+                                  </div>
                                   <canvas id="canvas-camera" width="{{ctrl.width}}" height="{{ctrl.height}}" class="teste canvas-video"></canvas>
                                   <video id="remoteVideo" width="{{ctrl.width}}" height="{{ctrl.height}}" autoplay class="teste video-remote"></video>
+                                  
                                   <video id="localVideo" autoplay muted style="width:1px; height: 1px;"></video>
                                   <canvas id="canvas-print" style="display: none;"></canvas>
                                 </div>
@@ -471,6 +475,7 @@
                             <a data-toggle="tooltip" title="Parar Gravação" ng-click="ctrl.pararGravacao(questao)" ng-if="questao.gravando">
                               <i class="glyphicon glyphicon-stop icon-color" style="font-size: 200%" aria-hidden="true"></i>
                             </a>
+                            <span ng-show="questao.gravando">{{timer}}</span>
                           </div>
                           <div class="col-xs-2" style="padding-left: 0px; padding-top: 5px;">
                             <button type="button" class="btn btn-warning" data-toggle="tooltip" ng-click="ctrl.abrirDocumentos(questao)">
@@ -494,6 +499,7 @@
                               <a data-toggle="tooltip" title="Parar Gravação" ng-click="ctrl.pararGravacao(questao)" ng-if="questao.gravando">
                                 <i class="glyphicon glyphicon-stop icon-color" style="font-size: 200%" aria-hidden="true"></i>
                               </a>
+                              <span ng-show="questao.gravando">{{timer}}</span>
                             </div>
                             <div class="col-xs-2" style="padding-left: 0px; padding-top: 5px;">
                               <button type="button" class="btn btn-warning" data-toggle="tooltip" ng-click="ctrl.abrirDocumentos(questao)">
@@ -515,12 +521,13 @@
                                 <a data-toggle="tooltip" title="Tirar Foto" ng-click="ctrl.tirarPrint(questao);" style="padding-right: 10px;">
                                   <i class="glyphicon glyphicon-camera icon-color" style="font-size: 200%; line-height: 1.1;" aria-hidden="true"></i>
                                 </a>
-                                <a data-toggle="tooltip" title="Gravar Vídeo" ng-click="ctrl.gravarVideo(questao)" ng-if="!questao.gravando">
+                                <a data-toggle="tooltip" title="Gravar Vídeo" ng-click="ctrl.gravarVideo(questao); " ng-if="!questao.gravando">
                                   <i class="glyphicon glyphicon-film icon-color" style="font-size: 180%" aria-hidden="true"></i>
                                 </a>
                                 <a data-toggle="tooltip" title="Parar Gravação" ng-click="ctrl.pararGravacao(questao)" ng-if="questao.gravando">
                                   <i class="glyphicon glyphicon-stop icon-color" style="font-size: 200%" aria-hidden="true"></i>
                                 </a>
+                                <span ng-show="questao.gravando">{{timer}}</span>
                               </div>
                               <div class="col-xs-2" style="padding-left: 0px; padding-top: 5px;">
                                 <button type="button" class="btn btn-warning" data-toggle="tooltip" ng-click="ctrl.abrirDocumentos(questao)">

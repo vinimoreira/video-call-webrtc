@@ -1,0 +1,10 @@
+{
+    "host": "localhost",
+    "port-http": 4445,
+    "port-https": 4445,
+    "LANAccess": "0.0.0.0",
+    "ssl": {
+        "key": "./../certificates/localhost.key",
+        "cert": "./../certificates/localhost.crt"
+    }
+}

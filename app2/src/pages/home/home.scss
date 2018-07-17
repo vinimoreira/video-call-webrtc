@@ -18,7 +18,7 @@ page-home {
     left: 0;
     background-color: aqua;
     position: absolute;
-    object-fit: fill;
+    object-fit: cover;
   }
   .canvas {
     height: 100%;
@@ -28,6 +28,7 @@ page-home {
     top: 0;
     left: 0;
     z-index: 9999;
+    object-fit: cover;
   }
   .row-bottom {
     position: fixed;

@@ -36,11 +36,13 @@ const peerConnectionConfig = {
 
       ctrl.questoes = [{
           titulo: "Pergunta A",
-          tipo: "Text"
+          tipo: "Gravacao",
+          documentos: []
         },
         {
           titulo: "Pergunta B",
-          tipo: "SelecaoMultipla"
+          tipo: "SelecaoMultipla",
+          documentos: []
         },
         {
           titulo: "Pergunta C",
@@ -49,7 +51,8 @@ const peerConnectionConfig = {
         },
         {
           titulo: "Pergunta D",
-          tipo: "SelecaoMultipla"
+          tipo: "SelecaoMultipla",
+          documentos: []
         }
       ];
 

@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { NavController } from "ionic-angular";
 import { Diagnostic } from "@ionic-native/diagnostic";
-import { Socket } from 'ng-socket-io';
+import { Socket } from "ng-socket-io";
 
 @Component({
   selector: "page-home",
@@ -9,6 +9,7 @@ import { Socket } from 'ng-socket-io';
 })
 export class HomePage implements OnInit {
   @ViewChild("myCanvas") canvas: any;
+  @ViewChild("canvasPrint") canvasPrint: any;
 
   private _localStream: any;
   otherVideo: HTMLMediaElement;
@@ -20,6 +21,8 @@ export class HomePage implements OnInit {
   serverConnection: WebSocket;
   callerId: number;
   width_components: number;
+  tipoBotao: number = 1;
+  showButtons: boolean;
 
   //Canvas
   canvasElement: any;
@@ -32,7 +35,7 @@ export class HomePage implements OnInit {
     private elRef: ElementRef, // private render: Render
     private socket: Socket
   ) {
-
+    this.showButtons = true;
     this.uuid = this.createUUID();
     this.criarSocket();
 
@@ -41,6 +44,8 @@ export class HomePage implements OnInit {
     let constraints = {
       audio: true,
       video: {
+        // width: 1920,
+        // height: 1080,
         facingMode: false ? "user" : "environment"
       }
     };
@@ -59,7 +64,6 @@ export class HomePage implements OnInit {
         alert("Erro ao iniciar Video");
         console.log(err);
       });
-
   }
 
   ionViewWillLeave() {
@@ -67,12 +71,10 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit(): any {
-
     this.canvas.nativeElement.setAttribute("width", this.width_components);
     this.localVideo = this.elRef.nativeElement.querySelector("#my-video");
     this.otherVideo = this.elRef.nativeElement.querySelector("#other-video");
     this.canvasElement = this.canvas.nativeElement;
-
   }
 
   start(isCaller) {
@@ -93,15 +95,27 @@ export class HomePage implements OnInit {
       this.peerConnection.addStream(this._localStream);
 
       if (isCaller) {
+        this.tipoBotao = 3;
         this.peerConnection
           .createOffer()
           .then(description => this.createdDescription(description))
           .catch(this.errorHandler);
       }
     } catch (error) {
-      alert('Erro ao iniciar Conexão: ' + JSON.stringify(error));
+      alert("Erro ao iniciar Conexão: " + JSON.stringify(error));
     }
+  }
 
+  showKeypad() {
+    this.tipoBotao = 2;
+    setTimeout(() => {
+      console.log("Chamou o timeout");
+      this.showButtons = false;
+    }, 5000);
+  }
+
+  voltar() {
+    this.tipoBotao = 1;
   }
 
   startCall() {
@@ -109,16 +123,14 @@ export class HomePage implements OnInit {
   }
 
   stopCall() {
-
+    this.tipoBotao = 1;
+    this.showButtons = true;
+    this.peerConnection.close();
     //Emite evento de encerramento da chamada
-    this.socket.emit('call:end', {
+    this.socket.emit("call:end", {
       request: Number(this.callerId),
       uuid: this.uuid
     });
-
-    this.peerConnection.close();
-
-
   }
 
   createUUID(): number {
@@ -127,13 +139,11 @@ export class HomePage implements OnInit {
 
   gotIceCandidate(event) {
     if (event.candidate != null) {
-
       this.socket.emit("call:ICECandidate", {
         request: Number(this.callerId),
         ice: event.candidate,
         uuid: this.uuid
       });
-
     }
   }
 
@@ -148,14 +158,12 @@ export class HomePage implements OnInit {
     this.peerConnection
       .setLocalDescription(description)
       .then(() => {
-
         //Notifica o inicio da chamada
         this.socket.emit("call:start", {
           sdp: this.peerConnection.localDescription,
           uuid: this.uuid,
           request: Number(this.callerId)
         });
-
       })
       .catch(this.errorHandler);
   }
@@ -231,42 +239,42 @@ export class HomePage implements OnInit {
   }
 
   criarSocket() {
-
     //Conecta
     this.socket.connect();
-    this.socket.emit('init', { uuid: this.uuid })
-
+    this.socket.emit("init", { uuid: this.uuid });
 
     //Resposta dos eventos
-    this.socket.on("call:start", (data) => this.socketCall(data))
-    this.socket.on("call:ICECandidate", (data) => this.socketICE(data));
-    this.socket.on("call:end", (data) => this.socketCallEnd(data))
-    this.socket.on("canvas:clean", (data) => this.socketCanvasClean(data))
-    this.socket.on("canvas:draw", (data) => this.socketCanvasDraw(data));
+    this.socket.on("call:start", data => this.socketCall(data));
+    this.socket.on("call:ICECandidate", data => this.socketICE(data));
+    this.socket.on("call:end", data => this.socketCallEnd(data));
+    this.socket.on("canvas:clean", data => this.socketCanvasClean(data));
+    this.socket.on("canvas:draw", data => this.socketCanvasDraw(data));
+    this.socket.on("canvas:takePhoto", data => this.socketTakePhoto(data));
+  }
 
+  showButton() {
+    this.showButtons = true;
+    setTimeout(() => {
+      this.showButtons = false;
+    }, 5000);
   }
 
   private verificaConexao() {
-
     //Verifica se já está estabelicida a conexão
     if (!this.peerConnection || this.peerConnection.signalingState == "closed")
       this.start(false);
-
   }
 
   private socketICE(data) {
-
     //Verfico a Conexao
     this.verificaConexao();
 
     if (data.uuid == this.uuid) return;
 
     this.receivedIceCandidate(data);
-
   }
 
   private socketCall(data: any) {
-
     //Verfico a Conexao
     this.verificaConexao();
 
@@ -277,7 +285,6 @@ export class HomePage implements OnInit {
     //if (!request) request = data.uuid;
 
     this.receivedSDP(data);
-
   }
 
   private socketCallEnd(data) {
@@ -289,11 +296,9 @@ export class HomePage implements OnInit {
 
     this.stopCall();
     this.limparDadosCanvas();
-
   }
 
   private socketCanvasClean(data) {
-
     //Verfico a Conexao
     this.verificaConexao();
 
@@ -302,11 +307,9 @@ export class HomePage implements OnInit {
 
     //Chama o método que limpa os dados
     this.limparDadosCanvas();
-
   }
 
   private socketCanvasDraw(data) {
-
     //Verfico a Conexao
     this.verificaConexao();
 
@@ -315,8 +318,30 @@ export class HomePage implements OnInit {
 
     //Chama o método que limpa os dados
     this.desenharPontos(data);
-
   }
 
+  private socketTakePhoto(data) {
+    //
+    this.canvasPrint.nativeElement.height = this.localVideo.offsetHeight;
+    this.canvasPrint.nativeElement.width = this.localVideo.offsetWidth;
+    //
+    let ctx = this.canvasPrint.nativeElement.getContext("2d");
+    ctx.height = this.localVideo.offsetHeight;
+    ctx.width = this.localVideo.offsetWidth;
+//
+    ctx.drawImage(
+      this.localVideo,
+      0,
+      0,
+      this.localVideo.offsetWidth,
+      this.localVideo.offsetHeight
+    );
 
+    ctx.canvas.toBlob((blob) => {
+      this.socket.emit("canvas:receivePhoto", {
+        request: Number(this.callerId),
+        blob: blob
+      });
+    });
+  }
 }

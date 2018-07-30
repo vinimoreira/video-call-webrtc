@@ -1,3 +1,5 @@
 node_modules
 npm-debug.log
 app2/irisk-videocall.apk
+.angulardoc.json
+package-lock.json
